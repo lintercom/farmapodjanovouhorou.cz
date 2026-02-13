@@ -118,7 +118,12 @@ a {
   height: clamp(4.83rem, 9.43vw, 6.44rem);
   width: auto;
   object-fit: contain;
-  transition: height 0.32s ease;
+  transform-origin: center;
+  transform: translateZ(0) scale(1);
+  will-change: transform;
+  backface-visibility: hidden;
+  image-rendering: auto;
+  transition: transform 0.32s ease;
 }
 
 .site-header.is-scrolled .brand {
@@ -127,7 +132,7 @@ a {
 }
 
 .site-header.is-scrolled .brand img {
-  height: clamp(3.7rem, 6.1vw, 4rem);
+  transform: translateZ(0) scale(0.64);
 }
 
 .nav-meta {
