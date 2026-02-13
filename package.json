@@ -1,0 +1,20 @@
+{
+  "name": "fpjh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "verify-migration.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "playwright": "^1.58.2",
+    "vite": "^7.3.1"
+  }
+}
