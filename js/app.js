@@ -380,10 +380,10 @@ function renderHighlights() {
   const el = document.getElementById("highlights");
   if (!el) return;
   const items = [
-    { icon: "△", title: "tábory", target: "tabory.html", text: "Pobytové i příměstské programy v přírodě." },
-    { icon: "○", title: "jízdy", target: "jizdy.html", text: "Vyjížďky, výuka i každodenní péče o koně." },
-    { icon: "□", title: "naše koně", target: "nasi-kone.html", text: "Poznejte náš koňský tým a jeho příběhy." },
-    { icon: "◇", title: "galerie", target: "galerie.html", text: "Fotky z farmy, táborů i každodenního života." },
+    { title: "tábory", target: "tabory.html", text: "Pobytové i příměstské programy v přírodě." },
+    { title: "jízdy", target: "jizdy.html", text: "Vyjížďky, výuka i každodenní péče o koně." },
+    { title: "naše koně", target: "nasi-kone.html", text: "Poznejte náš koňský tým a jeho příběhy." },
+    { title: "galerie", target: "galerie.html", text: "Fotky z farmy, táborů i každodenního života." },
   ];
 
   el.innerHTML = `
@@ -391,8 +391,7 @@ function renderHighlights() {
       ${items
         .map(
           (item) => `
-            <a class="highlight-item" href="#${item.target}">
-              <span class="highlight-icon">${item.icon}</span>
+            <a class="highlight-item" href="${item.target}">
               <h3>${escapeHtml(item.title)}</h3>
               <p>${escapeHtml(item.text)}</p>
             </a>

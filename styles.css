@@ -361,14 +361,23 @@ a {
 }
 
 .highlight-icon {
-  width: 2rem;
-  height: 2rem;
+  width: 2.35rem;
+  height: 2.35rem;
   border-radius: 50%;
   border: 1px solid var(--line);
   display: grid;
   place-items: center;
   margin-bottom: 0.55rem;
   color: var(--secondary);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--surface), var(--accent) 35%);
+}
+
+.highlight-icon-img {
+  width: 74%;
+  height: 74%;
+  object-fit: contain;
+  opacity: 0.92;
 }
 
 .highlight-item h3 {
@@ -425,6 +434,85 @@ a {
 .card-body h3,
 .voucher-card h3 {
   margin: 0 0 0.45rem;
+}
+
+body[data-page="home"] #about,
+body[data-page="home"] #services,
+body[data-page="home"] #horses,
+body[data-page="home"] #gallery,
+body[data-page="home"] #contact {
+  position: relative;
+}
+
+body[data-page="home"] #about > *,
+body[data-page="home"] #services > *,
+body[data-page="home"] #horses > *,
+body[data-page="home"] #gallery > *,
+body[data-page="home"] #contact > * {
+  position: relative;
+  z-index: 1;
+}
+
+body[data-page="home"] #about::before,
+body[data-page="home"] #services::after,
+body[data-page="home"] #horses::after,
+body[data-page="home"] #gallery::before,
+body[data-page="home"] #contact::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.46;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12));
+}
+
+body[data-page="home"] #about::before {
+  width: 11rem;
+  height: 11rem;
+  left: 5%;
+  top: 10%;
+  background-image: url("img/staj.png");
+  transform: rotate(-10deg);
+}
+
+body[data-page="home"] #services::after {
+  width: 10.5rem;
+  height: 10.5rem;
+  right: 7%;
+  top: 16%;
+  background-image: url("img/seno.png");
+  transform: rotate(11deg);
+}
+
+body[data-page="home"] #horses::after {
+  width: 9.5rem;
+  height: 9.5rem;
+  left: 38%;
+  top: 4%;
+  background-image: url("img/ohrada_sedlo.png");
+  transform: rotate(-12deg);
+}
+
+body[data-page="home"] #gallery::before {
+  width: 13.5rem;
+  height: 13.5rem;
+  left: 50%;
+  top: -5.7rem;
+  transform: translateX(-50%) rotate(-5deg);
+  background-image: url("img/traktor.png");
+  opacity: 0.52;
+}
+
+body[data-page="home"] #contact::after {
+  width: 8.5rem;
+  height: 8.5rem;
+  right: 11%;
+  top: 6%;
+  background-image: url("img/helma.png");
+  transform: rotate(7deg);
 }
 
 .link-inline {
@@ -744,5 +832,13 @@ summary {
   .split,
   .grid-2 {
     grid-template-columns: 1fr;
+  }
+
+  body[data-page="home"] #about::before,
+  body[data-page="home"] #services::after,
+  body[data-page="home"] #horses::after,
+  body[data-page="home"] #gallery::before,
+  body[data-page="home"] #contact::after {
+    display: none;
   }
 }
