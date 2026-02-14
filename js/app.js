@@ -2,6 +2,39 @@ import { loadData, saveData, exportData, importDataFromFile } from "./storage.js
 
 const VALID_USER = "admin";
 const VALID_PASS = "admin";
+const CMS_SESSION_KEY = "farmCmsAuth";
+const CMS_PAGE_SCOPES = {
+  home: ["settings", "hero", "about", "services", "horses", "gallery", "vouchers", "contact"],
+  tabory: ["services"],
+  jizdy: ["services"],
+  "nasi-kone": ["horses"],
+  galerie: ["gallery"],
+  kontakt: ["contact"],
+};
+const CMS_SCOPE_HELP = {
+  home: "Domovska stranka: upravujes globalni nastaveni, hero, O nas, sluzby, kone, galerii, produkty i kontakt.",
+  tabory: "Stranka Tabory cte data ze sekce Sluzby (filtrace polozek s textem tabor).",
+  jizdy: "Stranka Jizdy cte data ze sekce Sluzby (filtrace polozek s textem vyjizdka/jizda/ponik/kun).",
+  "nasi-kone": "Stranka Nase kone cte data ze sekce Naši kone.",
+  galerie: "Stranka Galerie cte data ze sekce Galerie.",
+  kontakt: "Stranka Kontakt cte data ze sekce Kontakt.",
+};
+const CMS_SCOPE_LABELS = {
+  home: "Domu",
+  tabory: "Tabory",
+  jizdy: "Jizdy",
+  "nasi-kone": "Nase kone",
+  galerie: "Galerie",
+  kontakt: "Kontakt",
+};
+const CMS_SCOPE_URLS = {
+  home: "index.html",
+  tabory: "tabory.html",
+  jizdy: "jizdy.html",
+  "nasi-kone": "nasi-kone.html",
+  galerie: "galerie.html",
+  kontakt: "kontakt.html",
+};
 let persistedData = loadData();
 let draftData = clone(persistedData);
 let lastFocusedElement = null;
@@ -13,16 +46,13 @@ const fieldMap = {
   "cms-secondary-color": ["settings", "secondaryColor"],
   "cms-accent-color": ["settings", "accentColor"],
   "cms-font-family": ["settings", "fontFamily"],
-  "cms-favicon": ["settings", "favicon"],
   "cms-footer-text": ["settings", "footerText"],
-  "cms-hero-image": ["sections", "hero", "image"],
   "cms-hero-title": ["sections", "hero", "title"],
   "cms-hero-subtitle": ["sections", "hero", "subtitle"],
   "cms-hero-cta-text": ["sections", "hero", "ctaText"],
   "cms-hero-cta-target": ["sections", "hero", "ctaTarget"],
   "cms-about-title": ["sections", "about", "title"],
   "cms-about-text": ["sections", "about", "text"],
-  "cms-about-image": ["sections", "about", "image"],
   "cms-services-title": ["sections", "services", "title"],
   "cms-horses-title": ["sections", "horses", "title"],
   "cms-gallery-title": ["sections", "gallery", "title"],
@@ -45,7 +75,6 @@ const repeaterConfig = {
       { key: "title", label: "Název" },
       { key: "description", label: "Popis", type: "textarea" },
       { key: "price", label: "Cena" },
-      { key: "image", label: "Obrázek (URL/Base64)" },
     ],
     uploadKey: "image",
   },
@@ -59,7 +88,6 @@ const repeaterConfig = {
       { key: "breed", label: "Plemeno" },
       { key: "age", label: "Věk" },
       { key: "description", label: "Popis", type: "textarea" },
-      { key: "image", label: "Obrázek (URL/Base64)" },
     ],
     uploadKey: "image",
   },
@@ -69,7 +97,6 @@ const repeaterConfig = {
     path: ["sections", "gallery", "images"],
     itemTitle: "Fotka",
     fields: [
-      { key: "src", label: "Obrázek (URL/Base64)" },
       { key: "alt", label: "Alt text" },
     ],
     uploadKey: "src",
@@ -102,6 +129,7 @@ function init() {
   bindCmsLiveEditing();
   bindCmsRepeaters();
   bindCmsActions();
+  initCmsEnvironment();
   bindGlobalClicks();
   renderSite(persistedData);
 }
@@ -407,9 +435,7 @@ function bindLoginAndCms() {
   const loginModal = document.getElementById("login-modal");
   const loginForm = document.getElementById("login-form");
   const loginError = document.getElementById("login-error");
-  const cmsPanel = document.getElementById("cms-panel");
-  const cmsClose = document.getElementById("cms-close");
-  if (!lockBtn || !loginModal || !loginForm || !loginError || !cmsPanel || !cmsClose) return;
+  if (!lockBtn || !loginModal || !loginForm || !loginError) return;
   const loginCard = loginModal.querySelector(".modal-card");
 
   lockBtn.addEventListener("click", () => {
@@ -430,14 +456,13 @@ function bindLoginAndCms() {
       loginModal.classList.remove("open");
       loginModal.setAttribute("aria-hidden", "true");
       loginForm.reset();
-      openCms(cmsPanel);
+      setCmsAuthenticated(true);
+      window.location.href = "cms.html";
       return;
     }
 
     loginError.textContent = "Neplatné přihlašovací údaje.";
   });
-
-  cmsClose.addEventListener("click", () => closeCms(cmsPanel));
 }
 
 function bindCmsLiveEditing() {
@@ -458,16 +483,20 @@ function bindCmsLiveEditing() {
     const target = event.target;
     if (!(target instanceof HTMLInputElement) || target.type !== "file" || !target.files?.[0]) return;
 
+    if (target.id === "cms-favicon-upload") {
+      draftData.settings.favicon = await fileToBase64(target.files[0]);
+      renderSite(draftData);
+      return;
+    }
+
     if (target.id === "cms-hero-image-upload") {
       draftData.sections.hero.image = await fileToBase64(target.files[0]);
-      document.getElementById("cms-hero-image").value = draftData.sections.hero.image;
       renderSite(draftData);
       return;
     }
 
     if (target.id === "cms-about-image-upload") {
       draftData.sections.about.image = await fileToBase64(target.files[0]);
-      document.getElementById("cms-about-image").value = draftData.sections.about.image;
       renderSite(draftData);
     }
   });
@@ -573,6 +602,79 @@ function bindCmsActions() {
   });
 }
 
+function initCmsEnvironment() {
+  if (document.body.dataset.page !== "cms") return;
+
+  const loginView = document.getElementById("cms-login-view");
+  const workspace = document.getElementById("cms-workspace");
+  const loginForm = document.getElementById("cms-login-form");
+  const loginError = document.getElementById("cms-login-error");
+  const logoutBtn = document.getElementById("cms-logout");
+  const scopeButtons = Array.from(document.querySelectorAll("[data-cms-scope]"));
+  const activePageLabel = document.getElementById("cms-active-page-label");
+  const openPageLink = document.getElementById("cms-open-page");
+  if (!loginView || !workspace || !loginForm || !loginError || !logoutBtn || scopeButtons.length === 0) return;
+
+  const setActiveScope = (scopeKey) => {
+    const safeScope = CMS_PAGE_SCOPES[scopeKey] ? scopeKey : "home";
+    workspace.dataset.cmsActiveScope = safeScope;
+    applyCmsScope(safeScope);
+
+    scopeButtons.forEach((button) => {
+      const buttonScope = button.getAttribute("data-cms-scope");
+      button.classList.toggle("is-active", buttonScope === safeScope);
+    });
+
+    if (activePageLabel) activePageLabel.textContent = CMS_SCOPE_LABELS[safeScope] ?? CMS_SCOPE_LABELS.home;
+    if (openPageLink) openPageLink.href = CMS_SCOPE_URLS[safeScope] ?? CMS_SCOPE_URLS.home;
+  };
+
+  const syncVisibility = () => {
+    const authenticated = isCmsAuthenticated();
+    loginView.hidden = authenticated;
+    workspace.hidden = !authenticated;
+
+    if (authenticated) {
+      persistedData = loadData();
+      draftData = clone(persistedData);
+      populateCmsFields();
+      setActiveScope(workspace.dataset.cmsActiveScope || "home");
+      renderSite(draftData);
+    }
+  };
+
+  syncVisibility();
+
+  loginForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const data = new FormData(loginForm);
+    const username = String(data.get("username") || "");
+    const password = String(data.get("password") || "");
+
+    if (username === VALID_USER && password === VALID_PASS) {
+      loginError.textContent = "";
+      setCmsAuthenticated(true);
+      loginForm.reset();
+      syncVisibility();
+      return;
+    }
+
+    loginError.textContent = "Neplatne prihlasovaci udaje.";
+  });
+
+  logoutBtn.addEventListener("click", () => {
+    setCmsAuthenticated(false);
+    window.location.href = "index.html";
+  });
+
+  scopeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const targetScope = button.getAttribute("data-cms-scope") || "home";
+      setActiveScope(targetScope);
+    });
+  });
+}
+
 function bindGlobalClicks() {
   document.addEventListener("click", (event) => {
     const target = event.target;
@@ -609,21 +711,6 @@ function bindGlobalClicks() {
   });
 }
 
-function openCms(panel) {
-  draftData = clone(persistedData);
-  populateCmsFields();
-  renderSite(draftData);
-  panel.classList.add("open");
-  panel.setAttribute("aria-hidden", "false");
-}
-
-function closeCms(panel) {
-  panel.classList.remove("open");
-  panel.setAttribute("aria-hidden", "true");
-  draftData = clone(persistedData);
-  renderSite(persistedData);
-}
-
 function closeModalById(modalId) {
   const modal = document.getElementById(modalId);
   if (!modal) return;
@@ -640,6 +727,30 @@ function populateCmsFields() {
   });
 
   Object.keys(repeaterConfig).forEach((key) => renderRepeater(key));
+}
+
+function applyCmsScope(scopeKey) {
+  const sections = document.querySelectorAll("[data-cms-section]");
+  if (sections.length === 0) return;
+
+  const visibleSections = CMS_PAGE_SCOPES[scopeKey] ?? CMS_PAGE_SCOPES.home;
+  sections.forEach((section) => {
+    const sectionKey = section.getAttribute("data-cms-section");
+    section.hidden = !visibleSections.includes(sectionKey);
+    if (!section.hidden) section.open = true;
+  });
+
+  const hint = document.getElementById("cms-scope-help");
+  if (hint) hint.textContent = CMS_SCOPE_HELP[scopeKey] ?? CMS_SCOPE_HELP.home;
+}
+
+function isCmsAuthenticated() {
+  return sessionStorage.getItem(CMS_SESSION_KEY) === "1";
+}
+
+function setCmsAuthenticated(value) {
+  if (value) sessionStorage.setItem(CMS_SESSION_KEY, "1");
+  else sessionStorage.removeItem(CMS_SESSION_KEY);
 }
 
 function renderRepeater(key) {
@@ -672,7 +783,7 @@ function renderRepeater(key) {
 
       const uploadHtml = config.uploadKey
         ? `
-          <label>Nahrát obrázek
+          <label>Nahrát obrázek (soubor)
             <input type="file" accept="image/*" data-repeater-upload="${key}" data-index="${index}" />
           </label>
         `
