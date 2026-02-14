@@ -5,6 +5,7 @@
   "main": "verify-migration.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
     "build": "vite build",
     "dev": "vite",
     "preview": "vite preview"
@@ -14,6 +15,9 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.0",
+    "globals": "^17.3.0",
     "playwright": "^1.58.2",
     "vite": "^7.3.1"
   }

@@ -154,13 +154,13 @@ function renderHero(hero) {
   el.innerHTML = `
     <div class="hero-overlay">
       <div class="container hero-content">
-        <h2 id="hero-title">${formatSectionTitle(hero.title)}</h2>
+        <h2 id="hero-title">${escapeHtml(formatHeroTitle(hero.title))}</h2>
         <p>${escapeHtml(hero.subtitle)}</p>
         <a class="btn btn-primary" href="${escapeAttr(hero.ctaTarget || "#contact")}">${escapeHtml(hero.ctaText)}</a>
       </div>
     </div>
   `;
-  el.style.backgroundImage = `linear-gradient(120deg, var(--hero-veil), rgba(0,0,0,.2)), url('${escapeAttr(hero.image)}')`;
+  el.style.backgroundImage = `linear-gradient(120deg, var(--hero-veil), rgba(0,0,0,.34)), url('${escapeAttr(hero.image)}')`;
 }
 
 function renderAbout(about) {
@@ -761,7 +761,14 @@ function escapeAttr(value) {
 
 function formatSectionTitle(title) {
   const normalized = String(title ?? "").trim().replace(/[.]$/, "");
-  return normalized.toLowerCase();
+  if (!normalized) return "";
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+}
+
+function formatHeroTitle(title) {
+  const normalized = String(title ?? "").trim().replace(/[.]$/, "");
+  if (!normalized) return "";
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1);
 }
 
 init();

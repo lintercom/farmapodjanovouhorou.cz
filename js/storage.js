@@ -15,7 +15,7 @@ export function loadData() {
   try {
     const parsed = JSON.parse(raw);
     return mergeWithDefaults(parsed, defaultData);
-  } catch (error) {
+  } catch {
     const fallback = deepClone(defaultData);
     saveData(fallback);
     return fallback;
@@ -52,7 +52,7 @@ export function importDataFromFile(file) {
         const parsed = JSON.parse(reader.result);
         const merged = mergeWithDefaults(parsed, defaultData);
         resolve(merged);
-      } catch (error) {
+      } catch {
         reject(new Error("Soubor není platný JSON backup."));
       }
     };

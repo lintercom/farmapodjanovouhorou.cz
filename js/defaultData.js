@@ -4,9 +4,9 @@ export const defaultData = {
   settings: {
     siteName: "Farma pod Janovu horou",
     logoText: "Farma pod Janovu horou",
-    primaryColor: "#4f7a5a",
-    secondaryColor: "#8c6a49",
-    accentColor: "#f2efe8",
+    primaryColor: "#365902",
+    secondaryColor: "#A9BF04",
+    accentColor: "#D9B752",
     fontFamily: "'Inter', sans-serif",
     favicon: "migration_export/images/krouzky/krouzky__02__40942955f2cf.png",
     footerText: "Farma pod Janovou horou z.s. | Janova Hora 466, 763 12 Vizovice",
