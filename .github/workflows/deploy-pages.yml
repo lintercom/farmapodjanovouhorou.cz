@@ -33,6 +33,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Copy static media folders
+        run: |
+          if [ -d "migration_export" ]; then cp -R migration_export dist/; fi
+          if [ -d "img" ]; then cp -R img dist/; fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
