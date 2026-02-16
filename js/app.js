@@ -1,43 +1,49 @@
 import { loadData, saveData, exportData, importDataFromFile } from "./storage.js";
 
+const PREFERRED_FONT_STACK = "'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Arial, sans-serif";
 const VALID_USER = "admin";
 const VALID_PASS = "admin";
 const CMS_SESSION_KEY = "farmCmsAuth";
 const CMS_PAGE_SCOPES = {
   home: ["settings", "hero", "about", "services", "horses", "gallery", "vouchers", "contact"],
-  tabory: ["services"],
-  jizdy: ["services"],
+  sluzby: ["services"],
+  akce: ["gallery"],
   "nasi-kone": ["horses"],
-  galerie: ["gallery"],
+  "o-nas": ["about"],
   kontakt: ["contact"],
 };
 const CMS_SCOPE_HELP = {
   home: "Domovska stranka: upravujes globalni nastaveni, hero, O nas, sluzby, kone, galerii, produkty i kontakt.",
-  tabory: "Stranka Tabory cte data ze sekce Sluzby (filtrace polozek s textem tabor).",
-  jizdy: "Stranka Jizdy cte data ze sekce Sluzby (filtrace polozek s textem vyjizdka/jizda/ponik/kun).",
+  sluzby: "Stranka Sluzby zobrazuje vsechny sluzby vcetne sekci tabory, krouzky a vyjizdky.",
+  akce: "Stranka Akce cte prispevky ze sekce Galerie.",
   "nasi-kone": "Stranka Nase kone cte data ze sekce Naši kone.",
-  galerie: "Stranka Galerie cte data ze sekce Galerie.",
+  "o-nas": "Stranka O nas cte data ze sekce O nas.",
   kontakt: "Stranka Kontakt cte data ze sekce Kontakt.",
 };
 const CMS_SCOPE_LABELS = {
   home: "Domu",
-  tabory: "Tabory",
-  jizdy: "Jizdy",
+  sluzby: "Sluzby",
+  akce: "Akce",
   "nasi-kone": "Nase kone",
-  galerie: "Galerie",
+  "o-nas": "O nas",
   kontakt: "Kontakt",
 };
 const CMS_SCOPE_URLS = {
   home: "index.html",
-  tabory: "tabory.html",
-  jizdy: "jizdy.html",
+  sluzby: "sluzby.html",
+  akce: "akce.html",
   "nasi-kone": "nasi-kone.html",
-  galerie: "galerie.html",
+  "o-nas": "o-nas.html",
   kontakt: "kontakt.html",
 };
 let persistedData = loadData();
+if (persistedData?.settings) {
+  persistedData.settings.fontFamily = PREFERRED_FONT_STACK;
+  saveData(persistedData);
+}
 let draftData = clone(persistedData);
 let lastFocusedElement = null;
+let activeHorseIndex = 0;
 
 const fieldMap = {
   "cms-site-name": ["settings", "siteName"],
@@ -141,6 +147,8 @@ function renderSite(data) {
   renderAbout(data.sections.about);
   renderServices(data.sections.services);
   renderHorses(data.sections.horses);
+  renderHomeActions(data.sections.gallery);
+  renderActions(data.sections.gallery);
   renderGallery(data.sections.gallery);
   renderVouchers(data.sections.vouchers);
   renderContact(data.sections.contact);
@@ -179,6 +187,26 @@ function applyTheme(settings) {
 function renderHero(hero) {
   const el = document.getElementById("hero");
   if (!el) return;
+  const page = document.body.dataset.page || "home";
+  const pageHeroTitles = {
+    sluzby: "Služby",
+    akce: "Akce",
+    "nasi-kone": "Naši koně",
+    "o-nas": "O nás",
+    kontakt: "Kontakt",
+  };
+
+  if (page !== "home") {
+    if (!pageHeroTitles[page]) return;
+    el.innerHTML = `
+      <div class="hero-overlay">
+        <div class="container hero-content page-hero-content"></div>
+      </div>
+    `;
+    el.style.backgroundImage = `linear-gradient(120deg, var(--hero-veil), rgba(0,0,0,.34)), url('${escapeAttr(hero.image)}')`;
+    return;
+  }
+
   el.innerHTML = `
     <div class="hero-overlay">
       <div class="container hero-content">
@@ -195,40 +223,26 @@ function renderAbout(about) {
   const el = document.getElementById("about");
   if (!el) return;
   el.innerHTML = `
-    <div class="split">
-      <article>
-        <h2 class="section-title">${escapeHtml(formatSectionTitle(about.title))}</h2>
-        <p>${escapeHtml(about.text)}</p>
-      </article>
-      <figure>
-        <img class="rounded-img" src="${escapeAttr(about.image)}" alt="Naše stáj a prostředí" />
-      </figure>
-    </div>
+    <article class="text-card">
+      <h2 class="section-title">${escapeHtml(formatSectionTitle(about.title))}</h2>
+      <p class="section-lead">${escapeHtml(about.text)}</p>
+    </article>
   `;
 }
 
 function renderServices(services) {
   const page = document.body.dataset.page || "home";
   const isCamp = (item) => /tábor/i.test(item.title) || /tábor/i.test(item.description);
+  const isClub = (item) => /krouž|krouzek/i.test(item.title) || /krouž|krouzek/i.test(item.description);
   const isRide = (item) => /vyjížďka|jízda|poník|kůň/i.test(`${item.title} ${item.description}`);
 
   let sectionTitle = services.title;
   let filteredItems = services.items;
-  if (page === "tabory") {
-    sectionTitle = "Tábory";
-    filteredItems = services.items.filter(isCamp);
-  }
-  if (page === "jizdy") {
-    sectionTitle = "Jízdy";
-    filteredItems = services.items.filter(isRide);
-  }
-  if (filteredItems.length === 0) filteredItems = services.items;
 
   const cards = filteredItems
     .map(
       (item) => `
     <article class="card">
-      <img src="${escapeAttr(item.image)}" alt="${escapeAttr(item.title)}" />
       <div class="card-body">
         <h3>${escapeHtml(item.title)}</h3>
         <p>${escapeHtml(item.description)}</p>
@@ -242,6 +256,109 @@ function renderServices(services) {
 
   const el = document.getElementById("services");
   if (!el) return;
+
+  if (page === "sluzby") {
+    const groups = [
+      {
+        id: "tabory",
+        title: "Tábory",
+        summary: "Pobytové i příměstské programy pro děti se zaměřením na péči o koně.",
+        items: services.items.filter(isCamp),
+      },
+      {
+        id: "krouzky",
+        title: "Kroužky",
+        summary: "Pravidelné lekce pro děti, které chtějí jezdit a starat se o koně dlouhodobě.",
+        items: services.items.filter(isClub),
+      },
+      {
+        id: "vyjizdky",
+        title: "Vyjížďky",
+        summary: "Vyjížďky do přírody a individuální jízdy pro začátečníky i pokročilé.",
+        items: services.items.filter(isRide),
+      },
+    ];
+
+    const quickNav = groups
+      .map(
+        (group) => `
+          <a class="service-quick-card" href="#${group.id}">
+            <strong>${escapeHtml(group.title)}</strong>
+            <span>${group.items.length} položek</span>
+          </a>
+        `
+      )
+      .join("");
+
+    const blocks = groups
+      .map((group) => {
+        const groupCards = (group.items.length > 0 ? group.items : services.items)
+          .map(
+            (item) => `
+              <article class="card">
+                <div class="card-body">
+                  <h3>${escapeHtml(item.title)}</h3>
+                  <p>${escapeHtml(item.description)}</p>
+                  <strong>${escapeHtml(item.price)}</strong>
+                </div>
+              </article>
+            `
+          )
+          .join("");
+        return `
+          <section class="service-group" id="${group.id}">
+            <div class="service-group-head">
+              <h3 class="section-subtitle">${escapeHtml(group.title)}</h3>
+              <span class="service-group-count">${group.items.length} položek</span>
+            </div>
+            <p class="service-group-summary">${escapeHtml(group.summary)}</p>
+            <div class="card-grid">${groupCards}</div>
+          </section>
+        `;
+      })
+      .join("");
+
+    el.innerHTML = `
+      <header class="service-page-head">
+        <h2 class="section-title">Služby</h2>
+        <p class="section-lead">Rychlý přehled všeho, co na farmě nabízíme. Vyber typ služby a hned uvidíš relevantní nabídku.</p>
+      </header>
+      <nav class="service-quick-nav" aria-label="Rychlá navigace služeb">
+        ${quickNav}
+      </nav>
+      ${blocks}
+    `;
+    return;
+  }
+
+  if (page === "home") {
+    const groups = [
+      { id: "tabory", title: "Tábory", summary: "Pobytové i příměstské programy pro děti se zaměřením na práci s koňmi.", items: services.items.filter(isCamp) },
+      { id: "krouzky", title: "Kroužky", summary: "Pravidelné jezdecké lekce a dlouhodobá péče o koně pro děti.", items: services.items.filter(isClub) },
+      { id: "vyjizdky", title: "Vyjížďky", summary: "Vyjížďky do přírody a individuální jízdy pro začátečníky i pokročilé.", items: services.items.filter(isRide) },
+    ];
+
+    const features = groups
+      .map((group, index) => {
+        const reverseClass = index % 2 === 1 ? "service-feature-reverse" : "";
+        return `
+          <article class="service-feature ${reverseClass}">
+            <div class="service-feature-body">
+              <h3>${escapeHtml(group.title)}</h3>
+              <p>${escapeHtml(group.summary)}</p>
+              <a class="btn btn-outline" href="sluzby.html#${group.id}">Prohlédnout ${escapeHtml(group.title.toLowerCase())}</a>
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+
+    el.innerHTML = `
+      <div class="home-service-stack">${features}</div>
+    `;
+    return;
+  }
+
   el.innerHTML = `
     <h2 class="section-title">${escapeHtml(formatSectionTitle(sectionTitle))}</h2>
     <div class="card-grid">${cards}</div>
@@ -251,20 +368,56 @@ function renderServices(services) {
 function renderHorses(horses) {
   const el = document.getElementById("horses");
   if (!el) return;
+  const page = document.body.dataset.page || "home";
+
   const cards = horses.items
     .map(
-      (horse) => `
-    <article class="card horse-card">
-      <img src="${escapeAttr(horse.image)}" alt="${escapeAttr(horse.name)}" />
+      (horse, index) => `
+    <article class="card horse-card ${page === "nasi-kone" ? "horse-card-clickable" : ""}" ${page === "nasi-kone" ? `data-horse-card="${index}"` : ""}>
       <div class="card-body">
         <h3>${escapeHtml(horse.name)}</h3>
         <p><strong>Plemeno:</strong> ${escapeHtml(horse.breed)} | <strong>Věk:</strong> ${escapeHtml(horse.age)}</p>
-        <p>${escapeHtml(horse.description)}</p>
+        <p>${escapeHtml(horse.description)}</p>        
+        ${page === "nasi-kone" ? `<button class="btn btn-outline horse-open-btn" type="button">Detail koně</button>` : ""}
       </div>
     </article>
   `
     )
     .join("");
+
+  if (page === "nasi-kone") {
+    el.innerHTML = `
+      <h2 class="section-title">${escapeHtml(formatSectionTitle(horses.title || "Naši koně"))}</h2>
+      <p class="section-lead">Klikni na koně, otevře se detail s informacemi a galerií fotek.</p>
+      <div class="card-grid">${cards}</div>
+    `;
+    ensureHorseModal();
+    return;
+  }
+
+  if (page === "home") {
+    const homeCards = horses.items
+      .slice(0, 3)
+      .map(
+        (horse) => `
+          <article class="card horse-card">
+            <div class="card-body">
+              <h3>${escapeHtml(horse.name)}</h3>
+              <p><strong>Plemeno:</strong> ${escapeHtml(horse.breed)}</p>
+            </div>
+          </article>
+        `
+      )
+      .join("");
+
+    el.innerHTML = `
+      <div class="home-strip-head">
+        <a class="link-inline" href="nasi-kone.html">zobrazit všechny koně <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="home-horse-strip">${homeCards}</div>
+    `;
+    return;
+  }
 
   el.innerHTML = `
     <h2 class="section-title">${escapeHtml(formatSectionTitle(horses.title))}</h2>
@@ -279,9 +432,12 @@ function renderGallery(gallery) {
   const items = gallery.images
     .map(
       (item, index) => `
-    <button class="gallery-item" data-lightbox-index="${index}" type="button" aria-label="Otevřít obrázek ${index + 1}">
-      <img src="${escapeAttr(item.src)}" alt="${escapeAttr(item.alt || "Galerie")}" />
-    </button>
+    <article class="action-card">
+      <div class="action-card-body">
+        <h3>${escapeHtml(`Akce #${index + 1}`)}</h3>
+        <p>${escapeHtml(item.alt || "Momentka z farmy.")}</p>
+      </div>
+    </article>
   `
     )
     .join("");
@@ -289,7 +445,54 @@ function renderGallery(gallery) {
   el.innerHTML = `
     <h2 class="section-title">${escapeHtml(formatSectionTitle(gallery.title))}</h2>
     <div class="gallery-grid">${items}</div>
-    <a class="link-inline" href="galerie.html">otevřít samostatnou galerii <span aria-hidden="true">→</span></a>
+    <a class="link-inline" href="akce.html">otevřít stránku akcí <span aria-hidden="true">→</span></a>
+  `;
+}
+
+function renderActions(gallery) {
+  const el = document.getElementById("actions");
+  if (!el) return;
+  const cards = gallery.images
+    .map(
+      (item, index) => `
+        <article class="action-card">
+          <div class="action-card-body">
+            <h3>${escapeHtml(`Příběh z farmy #${index + 1}`)}</h3>
+            <p>${escapeHtml(item.alt || "Momentka z každodenního života na farmě.")}</p>
+            <a class="link-inline" href="kontakt.html">zjistit více <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+
+  el.innerHTML = `
+    <h2 class="section-title">Akce</h2>
+    <p class="section-lead">Krátké příběhy a fotky z akcí, táborů i běžného života na farmě.</p>
+    <div class="action-grid">${cards}</div>
+  `;
+}
+
+function renderHomeActions(gallery) {
+  const el = document.getElementById("home-actions");
+  if (!el) return;
+  const latest = gallery.images.slice(-3).reverse();
+  const items = latest
+    .map(
+      (item, index) => `
+        <article class="home-action-item">
+          <div class="home-action-body">
+            <h3>${escapeHtml(`Akce #${latest.length - index}`)}</h3>
+            <p>${escapeHtml(item.alt || "Momentka z dění na farmě.")}</p>
+            <a class="link-inline" href="akce.html">zobrazit všechny akce <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+
+  el.innerHTML = `
+    <div class="home-actions-list">${items}</div>
   `;
 }
 
@@ -408,10 +611,10 @@ function renderHighlights() {
   const el = document.getElementById("highlights");
   if (!el) return;
   const items = [
-    { title: "tábory", target: "tabory.html", text: "Pobytové i příměstské programy v přírodě." },
-    { title: "jízdy", target: "jizdy.html", text: "Vyjížďky, výuka i každodenní péče o koně." },
+    { title: "tábory", target: "sluzby.html#tabory", text: "Pobytové i příměstské programy v přírodě." },
+    { title: "vyjížďky", target: "sluzby.html#vyjizdky", text: "Vyjížďky, výuka i každodenní péče o koně." },
     { title: "naše koně", target: "nasi-kone.html", text: "Poznejte náš koňský tým a jeho příběhy." },
-    { title: "galerie", target: "galerie.html", text: "Fotky z farmy, táborů i každodenního života." },
+    { title: "akce", target: "akce.html", text: "Články a fotky z farmy, táborů i každodenního života." },
   ];
 
   el.innerHTML = `
@@ -688,25 +891,45 @@ function bindGlobalClicks() {
       return;
     }
 
-    const galleryBtn = target.closest("[data-lightbox-index]");
-    if (galleryBtn) {
-      const index = Number(galleryBtn.getAttribute("data-lightbox-index"));
-      openLightbox(index);
+    const horseBtn = target.closest("[data-horse-card]");
+    if (horseBtn) {
+      const index = Number(horseBtn.getAttribute("data-horse-card"));
+      openHorseModal(index);
+      return;
     }
-  });
 
-  const lightbox = document.getElementById("lightbox");
-  const lightboxClose = document.getElementById("lightbox-close");
-  if (!lightbox || !lightboxClose) return;
-  lightboxClose.addEventListener("click", closeLightbox);
-  lightbox.addEventListener("click", (event) => {
-    if (event.target === lightbox) closeLightbox();
+    const closeHorseBtn = target.closest("[data-close-horse-modal]");
+    if (closeHorseBtn) {
+      closeHorseModal();
+      return;
+    }
+
+    if (target.id === "horse-modal") {
+      closeHorseModal();
+      return;
+    }
+
+    const horsePrev = target.closest("[data-horse-prev]");
+    if (horsePrev) {
+      moveHorse(-1);
+      return;
+    }
+
+    const horseNext = target.closest("[data-horse-next]");
+    if (horseNext) {
+      moveHorse(1);
+      return;
+    }
   });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-      closeLightbox();
+      closeHorseModal();
       closeModalById("login-modal");
+    } else if (event.key === "ArrowLeft" && isHorseModalOpen()) {
+      moveHorse(-1);
+    } else if (event.key === "ArrowRight" && isHorseModalOpen()) {
+      moveHorse(1);
     }
   });
 }
@@ -802,32 +1025,80 @@ function renderRepeater(key) {
     .join("");
 }
 
-function openLightbox(index) {
-  const item = draftData.sections.gallery.images[index];
-  if (!item) return;
-
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImage = document.getElementById("lightbox-image");
-  if (!lightbox || !lightboxImage) return;
-  lightboxImage.src = item.src;
-  lightboxImage.alt = item.alt || "Galerie";
-  lightbox.classList.add("open");
-  lightbox.setAttribute("aria-hidden", "false");
+function ensureHorseModal() {
+  if (document.getElementById("horse-modal")) return;
+  const modal = document.createElement("div");
+  modal.className = "horse-modal";
+  modal.id = "horse-modal";
+  modal.setAttribute("aria-hidden", "true");
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+  modal.innerHTML = `
+    <div class="horse-modal-card">
+      <button class="close-btn horse-modal-close" aria-label="Zavřít detail koně" data-close-horse-modal="true">×</button>
+      <div class="horse-modal-content">
+        <h3 id="horse-modal-name"></h3>
+        <p id="horse-modal-meta"></p>
+        <p id="horse-modal-description"></p>
+        <div class="horse-modal-actions">
+          <button class="btn btn-outline" type="button" data-horse-prev="true">Předchozí kůň</button>
+          <button class="btn btn-outline" type="button" data-horse-next="true">Další kůň</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.append(modal);
 }
 
-function closeLightbox() {
-  const lightbox = document.getElementById("lightbox");
-  if (!lightbox) return;
-  lightbox.classList.remove("open");
-  lightbox.setAttribute("aria-hidden", "true");
+function openHorseModal(index) {
+  const horses = draftData.sections.horses.items;
+  if (!horses[index]) return;
+  activeHorseIndex = index;
+  syncHorseModal();
+  const modal = document.getElementById("horse-modal");
+  if (!modal) return;
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closeHorseModal() {
+  const modal = document.getElementById("horse-modal");
+  if (!modal) return;
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+function isHorseModalOpen() {
+  const modal = document.getElementById("horse-modal");
+  return Boolean(modal && modal.classList.contains("open"));
+}
+
+function moveHorse(step) {
+  const horses = draftData.sections.horses.items;
+  if (horses.length === 0) return;
+  activeHorseIndex = (activeHorseIndex + step + horses.length) % horses.length;
+  syncHorseModal();
+}
+
+function syncHorseModal() {
+  const horse = draftData.sections.horses.items[activeHorseIndex];
+  if (!horse) return;
+  const name = document.getElementById("horse-modal-name");
+  const meta = document.getElementById("horse-modal-meta");
+  const description = document.getElementById("horse-modal-description");
+  if (!name || !meta || !description) return;
+  name.textContent = horse.name;
+  meta.textContent = `Plemeno: ${horse.breed} | Věk: ${horse.age}`;
+  description.textContent = horse.description;
 }
 
 function getServiceLink(item) {
   const content = `${item.title} ${item.description}`.toLowerCase();
-  if (content.includes("tábor")) return "tabory.html";
-  if (content.includes("vyjížď") || content.includes("poník") || content.includes("jízda")) return "jizdy.html";
+  if (content.includes("tábor")) return "sluzby.html#tabory";
+  if (content.includes("krouž") || content.includes("krouzek")) return "sluzby.html#krouzky";
+  if (content.includes("vyjížď") || content.includes("poník") || content.includes("jízda")) return "sluzby.html#vyjizdky";
   if (content.includes("kůň")) return "nasi-kone.html";
-  return "kontakt.html";
+  return "sluzby.html";
 }
 
 function setByPath(obj, path, value) {

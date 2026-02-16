@@ -7,7 +7,7 @@ export const defaultData = {
     primaryColor: "#365902",
     secondaryColor: "#A9BF04",
     accentColor: "#D9B752",
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     favicon: "migration_export/images/krouzky/krouzky__02__40942955f2cf.png",
     footerText: "Farma pod Janovou horou z.s. | Janova Hora 466, 763 12 Vizovice",
   },
@@ -69,6 +69,11 @@ export const defaultData = {
           age: "nar. 1997",
           description: "Zkušený koňský profesor, dnes užívá klidný důchod.",
           image: "migration_export/images/nasi-kone/nasi-kone__01__95347093d7a7.jpg",
+          photos: [
+            "migration_export/images/nasi-kone/nasi-kone__01__95347093d7a7.jpg",
+            "migration_export/images/nasi-kone/nasi-kone__11__607b4c4d4995.jpg",
+            "migration_export/images/nasi-kone/nasi-kone__12__94ca54afe330.jpg",
+          ],
         },
         {
           name: "Emira",
@@ -76,6 +81,10 @@ export const defaultData = {
           age: "nar. 2018",
           description: "Mladá talentovaná kobylka, jemná a vhodná pro zkušenější jezdce.",
           image: "migration_export/images/nasi-kone/nasi-kone__03__d57a97941507.jpg",
+          photos: [
+            "migration_export/images/nasi-kone/nasi-kone__03__d57a97941507.jpg",
+            "migration_export/images/nasi-kone/nasi-kone__13__ba17396501be.jpg",
+          ],
         },
         {
           name: "Khan Dengri",
@@ -83,6 +92,10 @@ export const defaultData = {
           age: "nar. 2009",
           description: "Plemenný hřebec s vyrovnanou povahou, výkonnost Endurance Z.",
           image: "migration_export/images/nasi-kone/nasi-kone__04__9acdd1d584cc.jpg",
+          photos: [
+            "migration_export/images/nasi-kone/nasi-kone__04__9acdd1d584cc.jpg",
+            "migration_export/images/nasi-kone/nasi-kone__14__de0f58c781ca.jpg",
+          ],
         },
         {
           name: "Tristan",
@@ -90,6 +103,10 @@ export const defaultData = {
           age: "nar. 2015",
           description: "Šikovný pracovitý kůň, trpělivý i pro začínající jezdce.",
           image: "migration_export/images/nasi-kone/nasi-kone__08__c7305fc18176.jpg",
+          photos: [
+            "migration_export/images/nasi-kone/nasi-kone__08__c7305fc18176.jpg",
+            "migration_export/images/nasi-kone/nasi-kone__16__82e8664f158c.jpg",
+          ],
         },
         {
           name: "Silver",
@@ -97,6 +114,10 @@ export const defaultData = {
           age: "nar. 2010",
           description: "Klidný koník, který miluje kontakt a péči.",
           image: "migration_export/images/nasi-kone/nasi-kone__09__cdfb1f2b8daf.jpg",
+          photos: [
+            "migration_export/images/nasi-kone/nasi-kone__09__cdfb1f2b8daf.jpg",
+            "migration_export/images/nasi-kone/nasi-kone__17__1e881a973898.jpg",
+          ],
         },
         {
           name: "Maya",
@@ -104,6 +125,10 @@ export const defaultData = {
           age: "nar. 2020",
           description: "Poník s vlastním názorem a velkou osobností.",
           image: "migration_export/images/nasi-kone/nasi-kone__10__efb82e2ce766.jpg",
+          photos: [
+            "migration_export/images/nasi-kone/nasi-kone__10__efb82e2ce766.jpg",
+            "migration_export/images/nasi-kone/nasi-kone__15__8ada3eb8fe1d.jpg",
+          ],
         },
       ],
     },

@@ -10,10 +10,10 @@
     <link id="dynamic-favicon" rel="icon" href="data:," />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body data-page="horses">
+  <body data-page="nasi-kone">
     <a class="skip-link" href="#main-content">Přeskočit na obsah</a>
     <header class="site-header" id="top">
-      <nav class="nav container" aria-label="Hlavní navigace">
+                  <nav class="nav container" aria-label="Hlavní navigace">
         <a href="index.html" class="brand" id="brand-link" aria-label="Domů">
           <img id="brand-logo" src="migration_export/images/krouzky/krouzky__02__40942955f2cf.png" alt="Logo farmy" />
         </a>
@@ -21,16 +21,29 @@
           <span></span><span></span><span></span>
         </button>
         <ul class="nav-links" id="nav-links" role="list">
-          <li><a href="index.html#services">Služby</a></li>
-          <li><a href="tabory.html">Tábory</a></li>
-          <li><a href="jizdy.html">Jízdy</a></li>
-          <li><a href="nasi-kone.html">Naše koně</a></li>
-          <li><a href="galerie.html">Galerie</a></li>
+          <li><a href="index.html">Domů</a></li>
+          <li class="nav-dropdown">
+            <div class="nav-dropdown-head">
+              <a class="nav-main-link" href="sluzby.html">Služby</a>
+              <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="services-dropdown" aria-label="Rozbalit služby">
+                <span aria-hidden="true">▾</span>
+              </button>
+            </div>
+            <ul class="dropdown-menu" id="services-dropdown">
+              <li><a href="sluzby.html#tabory">Tábory</a></li>
+              <li><a href="sluzby.html#krouzky">Kroužky</a></li>
+              <li><a href="sluzby.html#vyjizdky">Vyjížďky</a></li>
+            </ul>
+          </li>
+          <li><a href="akce.html">Akce</a></li>
+          <li><a href="nasi-kone.html">Naši koně</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
           <li><a href="kontakt.html">Kontakt</a></li>
         </ul>
       </nav>
     </header>
     <main id="main-content" tabindex="-1">
+      <section id="hero" class="hero page-hero"></section>
       <h1 class="visually-hidden">Naše koně</h1>
       <section id="horses" class="section container"></section>
     </main>
@@ -43,10 +56,6 @@
         <a class="lock-btn" href="index.html" aria-label="Přihlášení do CMS">🔒</a>
       </div>
     </footer>
-    <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Náhled obrázku">
-      <button id="lightbox-close" class="close-btn" aria-label="Zavřít náhled">×</button>
-      <img id="lightbox-image" alt="" />
-    </div>
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>

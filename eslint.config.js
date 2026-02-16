@@ -6,7 +6,7 @@ module.exports = [
     ignores: ["dist/**", "node_modules/**"],
   },
   {
-    files: ["eslint.config.js", "vite.config.js"],
+    files: ["eslint.config.js", "vite.config.js", "scripts/**/*.cjs"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "commonjs",

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Služby | Farma pod Janovou horou</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link id="dynamic-favicon" rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="sluzby">
+    <a class="skip-link" href="#main-content">Přeskočit na obsah</a>
+    <header class="site-header" id="top">
+                  <nav class="nav container" aria-label="Hlavní navigace">
+        <a href="index.html" class="brand" id="brand-link" aria-label="Domů">
+          <img id="brand-logo" src="migration_export/images/krouzky/krouzky__02__40942955f2cf.png" alt="Logo farmy" />
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="nav-links">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="nav-links" role="list">
+          <li><a href="index.html">Domů</a></li>
+          <li class="nav-dropdown">
+            <div class="nav-dropdown-head">
+              <a class="nav-main-link" href="sluzby.html">Služby</a>
+              <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="services-dropdown" aria-label="Rozbalit služby">
+                <span aria-hidden="true">▾</span>
+              </button>
+            </div>
+            <ul class="dropdown-menu" id="services-dropdown">
+              <li><a href="sluzby.html#tabory">Tábory</a></li>
+              <li><a href="sluzby.html#krouzky">Kroužky</a></li>
+              <li><a href="sluzby.html#vyjizdky">Vyjížďky</a></li>
+            </ul>
+          </li>
+          <li><a href="akce.html">Akce</a></li>
+          <li><a href="nasi-kone.html">Naši koně</a></li>
+          <li><a href="o-nas.html">O nás</a></li>
+          <li><a href="kontakt.html">Kontakt</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+      <section id="hero" class="hero page-hero"></section>
+      <h1 class="visually-hidden">Služby</h1>
+      <section id="services" class="section container"></section>
+    </main>
+
+    <footer class="site-footer" aria-label="Patička webu">
+      <div class="container footer-inner">
+        <div>
+          <p id="footer-text">© <span id="year"></span> Farma pod Janovou horou</p>
+          <p class="footer-note">Zásady soukromí · Obchodní podmínky · Provozovatel webu</p>
+        </div>
+        <button class="lock-btn" id="lock-btn" aria-label="Přihlášení do CMS" aria-controls="login-modal">🔒</button>
+      </div>
+    </footer>
+
+    <div class="modal" id="login-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="login-title">
+      <div class="modal-card" tabindex="-1">
+        <button class="close-btn" data-close-modal="login-modal" aria-label="Zavřít">×</button>
+        <h2 id="login-title">Přihlášení do CMS</h2>
+        <form id="login-form" aria-describedby="login-error">
+          <label for="login-username">Uživatelské jméno</label>
+          <input id="login-username" type="text" name="username" autocomplete="username" required />
+          <label for="login-password">Heslo</label>
+          <input id="login-password" type="password" name="password" autocomplete="current-password" required />
+          <p class="error-msg" id="login-error" aria-live="polite"></p>
+          <button class="btn btn-primary" type="submit">Přihlásit</button>
+        </form>
+      </div>
+    </div>
+
+    <aside class="cms-panel" id="cms-panel" aria-hidden="true" aria-label="CMS panel">
+      <div class="cms-head">
+        <h2>CMS Dashboard</h2>
+        <div class="cms-head-actions">
+          <button id="cms-export" class="btn btn-outline" type="button">Export JSON</button>
+          <label class="btn btn-outline import-btn">Import JSON<input type="file" id="cms-import" accept="application/json" hidden /></label>
+          <button id="cms-close" class="btn btn-ghost" type="button">Zavřít</button>
+        </div>
+      </div>
+      <form id="cms-form" class="cms-form">
+        <details open><summary>Globální nastavení</summary><div class="grid-2"><label>Název značky <input type="text" id="cms-site-name" /></label><label>Text loga <input type="text" id="cms-logo-text" /></label><label>Primární barva <input type="color" id="cms-primary-color" /></label><label>Sekundární barva <input type="color" id="cms-secondary-color" /></label><label>Akcent barva <input type="color" id="cms-accent-color" /></label><label>Font<select id="cms-font-family"><option value="'Inter', sans-serif">Inter</option><option value="'Poppins', sans-serif">Poppins</option></select></label><label>Favicon (URL/Base64) <input type="text" id="cms-favicon" /></label><label class="full">Text v patičce <input type="text" id="cms-footer-text" /></label><label>Hero obrázek (URL/Base64) <input type="text" id="cms-hero-image" /></label><label>Nahrát Hero obrázek <input type="file" id="cms-hero-image-upload" accept="image/*" /></label></div></details>
+        <details><summary>Hero sekce</summary><div class="grid-1"><label>Nadpis <input type="text" id="cms-hero-title" /></label><label>Podnadpis <textarea id="cms-hero-subtitle" rows="3"></textarea></label><label>CTA text <input type="text" id="cms-hero-cta-text" /></label><label>CTA odkaz (např. #contact) <input type="text" id="cms-hero-cta-target" /></label></div></details>
+        <details><summary>O nás</summary><div class="grid-1"><label>Nadpis <input type="text" id="cms-about-title" /></label><label>Text <textarea id="cms-about-text" rows="4"></textarea></label><label>Obrázek (URL/Base64) <input type="text" id="cms-about-image" /></label><label>Nahrát obrázek <input type="file" id="cms-about-image-upload" accept="image/*" /></label></div></details>
+        <details><summary>Služby</summary><div class="grid-1"><label>Nadpis <input type="text" id="cms-services-title" /></label><div id="cms-services-list" class="repeater-list"></div><button type="button" class="btn btn-outline" id="cms-services-add">+ Přidat službu</button></div></details>
+        <details><summary>Naši koně</summary><div class="grid-1"><label>Nadpis <input type="text" id="cms-horses-title" /></label><div id="cms-horses-list" class="repeater-list"></div><button type="button" class="btn btn-outline" id="cms-horses-add">+ Přidat koně</button></div></details>
+        <details><summary>Galerie</summary><div class="grid-1"><label>Nadpis <input type="text" id="cms-gallery-title" /></label><div id="cms-gallery-list" class="repeater-list"></div><button type="button" class="btn btn-outline" id="cms-gallery-add">+ Přidat fotku</button></div></details>
+        <details><summary>Dárkové poukazy</summary><div class="grid-1"><label>Nadpis <input type="text" id="cms-vouchers-title" /></label><label>Text <textarea id="cms-vouchers-text" rows="3"></textarea></label><div id="cms-vouchers-list" class="repeater-list"></div><button type="button" class="btn btn-outline" id="cms-vouchers-add">+ Přidat poukaz</button></div></details>
+        <details><summary>Kontakt</summary><div class="grid-2"><label>Nadpis <input type="text" id="cms-contact-title" /></label><label>Adresa <input type="text" id="cms-contact-address" /></label><label>Telefon <input type="text" id="cms-contact-phone" /></label><label>Email <input type="email" id="cms-contact-email" /></label><label class="full">Potvrzovací zpráva <textarea id="cms-contact-success" rows="2"></textarea></label></div></details>
+        <button class="btn btn-primary save-btn" type="button" id="cms-save">Uložit změny</button>
+      </form>
+    </aside>
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
