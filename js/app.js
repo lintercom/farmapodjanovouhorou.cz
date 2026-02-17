@@ -138,6 +138,7 @@ function init() {
   initCmsEnvironment();
   bindGlobalClicks();
   renderSite(persistedData);
+  applyBootstrapUi();
 }
 
 function renderSite(data) {
@@ -166,6 +167,8 @@ function renderSite(data) {
   if (footerText) {
     footerText.textContent = `© ${new Date().getFullYear()} ${data.settings.footerText || data.settings.siteName}`;
   }
+
+  applyBootstrapUi();
 }
 
 function applyTheme(settings) {
@@ -200,7 +203,7 @@ function renderHero(hero) {
     if (!pageHeroTitles[page]) return;
     el.innerHTML = `
       <div class="hero-overlay">
-        <div class="container hero-content page-hero-content"></div>
+        <div class="container hero-content page-hero-content d-flex align-items-end"></div>
       </div>
     `;
     el.style.backgroundImage = `linear-gradient(120deg, var(--hero-veil), rgba(0,0,0,.34)), url('${escapeAttr(hero.image)}')`;
@@ -223,7 +226,7 @@ function renderAbout(about) {
   const el = document.getElementById("about");
   if (!el) return;
   el.innerHTML = `
-    <article class="text-card">
+    <article class="text-card card border-0 shadow-sm">
       <h2 class="section-title">${escapeHtml(formatSectionTitle(about.title))}</h2>
       <p class="section-lead">${escapeHtml(about.text)}</p>
     </article>
@@ -242,8 +245,8 @@ function renderServices(services) {
   const cards = filteredItems
     .map(
       (item) => `
-    <article class="card">
-      <div class="card-body">
+    <article class="card h-100 border-0 shadow-sm">
+      <div class="card-body d-flex flex-column">
         <h3>${escapeHtml(item.title)}</h3>
         <p>${escapeHtml(item.description)}</p>
         <strong>${escapeHtml(item.price)}</strong>
@@ -342,7 +345,7 @@ function renderServices(services) {
       .map((group, index) => {
         const reverseClass = index % 2 === 1 ? "service-feature-reverse" : "";
         return `
-          <article class="service-feature ${reverseClass}">
+          <article class="service-feature ${reverseClass} card border-0 shadow-sm">
             <div class="service-feature-body">
               <h3>${escapeHtml(group.title)}</h3>
               <p>${escapeHtml(group.summary)}</p>
@@ -373,7 +376,7 @@ function renderHorses(horses) {
   const cards = horses.items
     .map(
       (horse, index) => `
-    <article class="card horse-card ${page === "nasi-kone" ? "horse-card-clickable" : ""}" ${page === "nasi-kone" ? `data-horse-card="${index}"` : ""}>
+    <article class="card horse-card h-100 border-0 shadow-sm ${page === "nasi-kone" ? "horse-card-clickable" : ""}" ${page === "nasi-kone" ? `data-horse-card="${index}"` : ""}>
       <div class="card-body">
         <h3>${escapeHtml(horse.name)}</h3>
         <p><strong>Plemeno:</strong> ${escapeHtml(horse.breed)} | <strong>Věk:</strong> ${escapeHtml(horse.age)}</p>
@@ -400,7 +403,7 @@ function renderHorses(horses) {
       .slice(0, 3)
       .map(
         (horse) => `
-          <article class="card horse-card">
+          <article class="card horse-card h-100 border-0 shadow-sm">
             <div class="card-body">
               <h3>${escapeHtml(horse.name)}</h3>
               <p><strong>Plemeno:</strong> ${escapeHtml(horse.breed)}</p>
@@ -432,7 +435,7 @@ function renderGallery(gallery) {
   const items = gallery.images
     .map(
       (item, index) => `
-    <article class="action-card">
+    <article class="action-card card border-0 shadow-sm h-100">
       <div class="action-card-body">
         <h3>${escapeHtml(`Akce #${index + 1}`)}</h3>
         <p>${escapeHtml(item.alt || "Momentka z farmy.")}</p>
@@ -455,7 +458,7 @@ function renderActions(gallery) {
   const cards = gallery.images
     .map(
       (item, index) => `
-        <article class="action-card">
+        <article class="action-card card border-0 shadow-sm h-100">
           <div class="action-card-body">
             <h3>${escapeHtml(`Příběh z farmy #${index + 1}`)}</h3>
             <p>${escapeHtml(item.alt || "Momentka z každodenního života na farmě.")}</p>
@@ -480,7 +483,7 @@ function renderHomeActions(gallery) {
   const items = latest
     .map(
       (item, index) => `
-        <article class="home-action-item">
+        <article class="home-action-item card border-0 shadow-sm h-100">
           <div class="home-action-body">
             <h3>${escapeHtml(`Akce #${latest.length - index}`)}</h3>
             <p>${escapeHtml(item.alt || "Momentka z dění na farmě.")}</p>
@@ -502,7 +505,7 @@ function renderVouchers(vouchers) {
   const items = vouchers.items
     .map(
       (voucher) => `
-    <article class="voucher-card">
+    <article class="voucher-card card border-0 shadow-sm h-100">
       <h3>${escapeHtml(voucher.name)}</h3>
       <p>${escapeHtml(voucher.description)}</p>
       <strong>${escapeHtml(voucher.price)}</strong>
@@ -530,13 +533,13 @@ function renderContact(contact) {
         <p><strong>Email:</strong> <a href="mailto:${escapeAttr(contact.email)}">${escapeHtml(contact.email)}</a></p>
         <a class="link-inline" href="https://mapy.cz" target="_blank" rel="noreferrer">zobrazit na mapě <span aria-hidden="true">→</span></a>
       </address>
-      <form id="contact-form" class="contact-form" novalidate aria-describedby="contact-success">
+      <form id="contact-form" class="contact-form vstack gap-2" novalidate aria-describedby="contact-success">
         <label for="contact-name">Jméno</label>
-        <input id="contact-name" type="text" name="name" required />
+        <input id="contact-name" class="form-control" type="text" name="name" required />
         <label for="contact-email">Email</label>
-        <input id="contact-email" type="email" name="email" required />
+        <input id="contact-email" class="form-control" type="email" name="email" required />
         <label for="contact-message">Zpráva</label>
-        <textarea id="contact-message" name="message" rows="4" required></textarea>
+        <textarea id="contact-message" class="form-control" name="message" rows="4" required></textarea>
         <button class="btn btn-primary" type="submit">Odeslat</button>
         <p class="success-msg" id="contact-success" aria-live="polite"></p>
       </form>
@@ -622,7 +625,7 @@ function renderHighlights() {
       ${items
         .map(
           (item) => `
-            <a class="highlight-item" href="${item.target}">
+            <a class="highlight-item card border-0 shadow-sm h-100" href="${item.target}">
               <h3>${escapeHtml(item.title)}</h3>
               <p>${escapeHtml(item.text)}</p>
             </a>
@@ -990,7 +993,7 @@ function renderRepeater(key) {
           if (field.type === "textarea") {
             return `
               <label>${field.label}
-                <textarea data-repeater-key="${key}" data-field="${field.key}" data-index="${index}" rows="3">${escapeHtml(
+                <textarea class="form-control" data-repeater-key="${key}" data-field="${field.key}" data-index="${index}" rows="3">${escapeHtml(
               value
             )}</textarea>
               </label>
@@ -998,7 +1001,7 @@ function renderRepeater(key) {
           }
           return `
             <label>${field.label}
-              <input type="text" value="${escapeAttr(value)}" data-repeater-key="${key}" data-field="${field.key}" data-index="${index}" />
+              <input class="form-control" type="text" value="${escapeAttr(value)}" data-repeater-key="${key}" data-field="${field.key}" data-index="${index}" />
             </label>
           `;
         })
@@ -1007,13 +1010,13 @@ function renderRepeater(key) {
       const uploadHtml = config.uploadKey
         ? `
           <label>Nahrát obrázek (soubor)
-            <input type="file" accept="image/*" data-repeater-upload="${key}" data-index="${index}" />
+            <input class="form-control" type="file" accept="image/*" data-repeater-upload="${key}" data-index="${index}" />
           </label>
         `
         : "";
 
       return `
-        <div class="repeater-item">
+        <div class="repeater-item card border-0 shadow-sm">
           <div class="repeater-item-head">
             <strong>${config.itemTitle} #${index + 1}</strong>
             <button type="button" class="btn btn-ghost" data-delete-item="true" data-repeater-key="${key}" data-index="${index}">Smazat</button>
@@ -1023,6 +1026,42 @@ function renderRepeater(key) {
       `;
     })
     .join("");
+
+  applyBootstrapUi();
+}
+
+function applyBootstrapUi() {
+  document.querySelectorAll("input, textarea, select").forEach((field) => {
+    if (!(field instanceof HTMLElement)) return;
+    if (field.closest(".nav")) return;
+
+    if (field instanceof HTMLInputElement) {
+      if (field.type === "hidden") return;
+      if (field.type === "color") {
+        field.classList.add("form-control", "form-control-color");
+        return;
+      }
+      if (field.type === "checkbox" || field.type === "radio") {
+        field.classList.add("form-check-input");
+        return;
+      }
+      field.classList.add("form-control");
+      return;
+    }
+
+    field.classList.add("form-control");
+  });
+
+  document.querySelectorAll(".btn.btn-outline").forEach((button) => {
+    button.classList.add("btn-outline-secondary");
+  });
+  document.querySelectorAll(".btn.btn-ghost").forEach((button) => {
+    button.classList.add("btn-light");
+  });
+
+  document.querySelectorAll(".text-card, .service-feature, .action-card, .home-action-item, .voucher-card, .repeater-item, .modal-card").forEach((card) => {
+    card.classList.add("card", "border-0", "shadow-sm");
+  });
 }
 
 function ensureHorseModal() {

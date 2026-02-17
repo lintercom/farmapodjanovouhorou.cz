@@ -13,23 +13,23 @@
     <link id="dynamic-favicon" rel="icon" href="data:," />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body data-page="cms" class="cms-page">
-    <main class="cms-shell">
-      <section id="cms-login-view" class="cms-login-card">
+  <body data-page="cms" class="cms-page d-flex flex-column min-vh-100">
+    <main class="cms-shell container py-4 py-lg-5 flex-grow-1">
+      <section id="cms-login-view" class="cms-login-card card shadow-sm border-0">
         <h1>Přihlášení do CMS</h1>
         <p>Po přihlášení upravíš obsah webu v přehledném administračním prostředí.</p>
-        <form id="cms-login-form" class="cms-login-form">
+        <form id="cms-login-form" class="cms-login-form vstack gap-2">
           <label for="cms-username">Uživatelské jméno</label>
-          <input id="cms-username" type="text" name="username" autocomplete="username" required />
+          <input id="cms-username" class="form-control" type="text" name="username" autocomplete="username" required />
           <label for="cms-password">Heslo</label>
-          <input id="cms-password" type="password" name="password" autocomplete="current-password" required />
+          <input id="cms-password" class="form-control" type="password" name="password" autocomplete="current-password" required />
           <p class="error-msg" id="cms-login-error" aria-live="polite"></p>
           <button class="btn btn-primary" type="submit">Přihlásit</button>
         </form>
       </section>
 
       <section id="cms-workspace" class="cms-layout" hidden data-cms-active-scope="home">
-        <header class="cms-topbar">
+        <header class="cms-topbar card border-0 shadow-sm">
           <div class="cms-topbar-brand">
             <strong>Farma CMS</strong>
             <span id="cms-active-page-label" class="cms-active-page-label">Domů</span>
@@ -46,8 +46,8 @@
           </div>
         </header>
 
-        <div class="cms-main">
-          <aside class="cms-sidebar" aria-label="Navigace CMS">
+        <div class="cms-main row g-4">
+          <aside class="cms-sidebar col-12 col-lg-3" aria-label="Navigace CMS">
             <nav class="cms-sidebar-nav">
               <button class="cms-nav-btn is-active" type="button" data-cms-scope="home">Domů</button>
               <button class="cms-nav-btn" type="button" data-cms-scope="sluzby">Služby</button>
@@ -58,7 +58,7 @@
             </nav>
           </aside>
 
-          <section class="cms-editor">
+          <section class="cms-editor col-12 col-lg-9">
             <header class="cms-editor-head">
               <h1>Editor obsahu</h1>
               <p id="cms-scope-help" class="cms-scope-help"></p>

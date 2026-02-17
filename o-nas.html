@@ -13,14 +13,14 @@
     <link id="dynamic-favicon" rel="icon" href="data:," />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body data-page="o-nas">
+  <body data-page="o-nas" class="d-flex flex-column min-vh-100">
     <a class="skip-link" href="#main-content">Přeskočit na obsah</a>
     <header class="site-header" id="top">
                   <nav class="nav container" aria-label="Hlavní navigace">
         <a href="index.html" class="brand" id="brand-link" aria-label="Domů">
           <img id="brand-logo" src="migration_export/images/krouzky/krouzky__02__40942955f2cf.png" alt="Logo farmy" />
         </a>
-        <button class="hamburger" id="hamburger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="nav-links">
+        <button class="hamburger" id="hamburger" type="button" aria-label="Otevřít menu" aria-expanded="false" aria-controls="nav-links">
           <span></span><span></span><span></span>
         </button>
         <ul class="nav-links" id="nav-links" role="list">
@@ -46,10 +46,10 @@
       </nav>
     </header>
 
-    <main id="main-content" tabindex="-1">
+    <main id="main-content" tabindex="-1" class="flex-grow-1">
       <section id="hero" class="hero page-hero"></section>
       <h1 class="visually-hidden">O nás</h1>
-      <section id="about" class="section container"></section>
+      <section id="about" class="section container py-4 py-lg-5"></section>
     </main>
 
     <footer class="site-footer" aria-label="Patička webu">
@@ -66,11 +66,11 @@
       <div class="modal-card" tabindex="-1">
         <button class="close-btn" data-close-modal="login-modal" aria-label="Zavřít">×</button>
         <h2 id="login-title">Přihlášení do CMS</h2>
-        <form id="login-form" aria-describedby="login-error">
+        <form id="login-form" class="vstack gap-2" aria-describedby="login-error">
           <label for="login-username">Uživatelské jméno</label>
-          <input id="login-username" type="text" name="username" autocomplete="username" required />
+          <input id="login-username" class="form-control" type="text" name="username" autocomplete="username" required />
           <label for="login-password">Heslo</label>
-          <input id="login-password" type="password" name="password" autocomplete="current-password" required />
+          <input id="login-password" class="form-control" type="password" name="password" autocomplete="current-password" required />
           <p class="error-msg" id="login-error" aria-live="polite"></p>
           <button class="btn btn-primary" type="submit">Přihlásit</button>
         </form>
