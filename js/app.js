@@ -337,9 +337,9 @@ function renderServices(services) {
 
   if (page === "home") {
     const groups = [
-      { id: "tabory", title: "Tábory", summary: "Pobytové i příměstské programy pro děti se zaměřením na práci s koňmi.", items: services.items.filter(isCamp) },
-      { id: "krouzky", title: "Kroužky", summary: "Pravidelné jezdecké lekce a dlouhodobá péče o koně pro děti.", items: services.items.filter(isClub) },
-      { id: "vyjizdky", title: "Vyjížďky", summary: "Vyjížďky do přírody a individuální jízdy pro začátečníky i pokročilé.", items: services.items.filter(isRide) },
+      { id: "tabory", title: "Tábory", summary: "Příměstské i pobytové tábory pro děti. Děti si užijí jízdu na koni, naučí se jak o ně pečovat a jak s nimi pracovat.", items: services.items.filter(isCamp) },
+      { id: "krouzky", title: "Kroužky", summary: "Jezdecký kroužek je určen pro děti, které mají rády koně, chtějí s nimi trávit čas, učit se jezdit a starat se o ně.", items: services.items.filter(isClub) },
+      { id: "vyjizdky", title: "Vyjížďky", summary: "Vyjížďky do přírody jsou pro všechny, kdo chtějí na chvíli zpomalit, nadechnout se čerstvého vzduchu a užít si klidnou jízdu v sedle. Svět je totiž nejkrásnější právě z koňského hřbetu.", items: services.items.filter(isRide) },
     ];
 
     const features = groups
@@ -418,9 +418,6 @@ function renderHorses(horses) {
 
     el.innerHTML = `
       <div class="${uiPatterns.FloatingPanel}">
-        <div class="home-strip-head">
-          <a class="link-inline" href="nasi-kone.html">zobrazit všechny koně <span aria-hidden="true">→</span></a>
-        </div>
         <div class="home-horse-strip">${homeCards}</div>
       </div>
     `;
