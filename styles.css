@@ -63,7 +63,7 @@
   --theme-olive: #93a603;
   --theme-wheat: #d9b752;
   --theme-sky: #94cef2;
-  --hero-veil: rgba(26, 46, 5, 0.52);
+  --hero-veil: rgba(26, 46, 5, 0.6);
 }
 
 /* ═══════════════════════════════════════════════════
@@ -392,12 +392,14 @@ a { color: inherit; text-decoration: none; }
 #hero-title .hero-line-pro {
   margin-left: clamp(3.4rem, 8vw, 5.8rem);
   font-size: clamp(1.55rem, 3.25vw, 2.2rem);
+  text-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
 }
 
 #hero-title .hero-line-kids {
   margin-left: clamp(1.8rem, 5vw, 3.6rem);
   font-size: clamp(1.75rem, 3.7vw, 2.45rem);
   width: fit-content;
+  text-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
 }
 
 #hero-title .hero-line-kids::after {
@@ -412,7 +414,7 @@ a { color: inherit; text-decoration: none; }
     color-mix(in srgb, var(--accent), #fff 6%),
     color-mix(in srgb, var(--accent), #fff 38%)
   );
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
 }
 
 #hero-title .hero-koni {
@@ -422,6 +424,7 @@ a { color: inherit; text-decoration: none; }
 .hero-custom-cta {
   margin-top: clamp(-4.55rem, -6.6vw, -3.1rem);
   margin-left: clamp(16.4rem, 31vw, 21rem);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
 }
 
 @media (max-width: 920px) {
@@ -452,7 +455,9 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.01em;
 }
 
-.btn-primary {
+.btn-primary,
+.btn-outline,
+.btn-ghost {
   --bs-btn-color: #fff;
   --bs-btn-bg: var(--accent);
   --bs-btn-border-color: var(--accent);
@@ -464,35 +469,11 @@ a { color: inherit; text-decoration: none; }
   --bs-btn-active-border-color: #345c3e;
   --bs-btn-focus-shadow-rgb: 74, 124, 89;
 }
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-outline:hover,
+.btn-ghost:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
-}
-
-.btn-outline {
-  --bs-btn-color: var(--text-1);
-  --bs-btn-bg: var(--bg-card);
-  --bs-btn-border-color: var(--line-hover);
-  --bs-btn-hover-color: var(--accent);
-  --bs-btn-hover-bg: var(--accent-light);
-  --bs-btn-hover-border-color: var(--accent);
-  --bs-btn-active-color: var(--accent-hover);
-  --bs-btn-active-bg: color-mix(in srgb, var(--accent-light), #fff 30%);
-  --bs-btn-active-border-color: var(--accent-hover);
-  --bs-btn-focus-shadow-rgb: 74, 124, 89;
-}
-
-.btn-ghost {
-  --bs-btn-color: var(--text-2);
-  --bs-btn-bg: transparent;
-  --bs-btn-border-color: transparent;
-  --bs-btn-hover-color: var(--text-1);
-  --bs-btn-hover-bg: rgba(0,0,0,0.04);
-  --bs-btn-hover-border-color: transparent;
-  --bs-btn-active-color: var(--text-1);
-  --bs-btn-active-bg: rgba(0,0,0,0.06);
-  --bs-btn-active-border-color: transparent;
-  --bs-btn-focus-shadow-rgb: 74, 124, 89;
 }
 
 /* ═══════════════════════════════════════════════════
