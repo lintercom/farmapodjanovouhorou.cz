@@ -192,6 +192,8 @@ function renderHero(hero) {
   const el = document.getElementById("hero");
   if (!el) return;
   const page = document.body.dataset.page || "home";
+  const heroTitleMarkup = formatHeroTitleMarkup(hero.title, page);
+  const isCustomHomeHeroTitle = isSplitHomeHeroTitle(hero.title, page);
   const pageHeroTitles = {
     sluzby: "Služby",
     akce: "Akce",
@@ -214,9 +216,8 @@ function renderHero(hero) {
   el.innerHTML = `
     <div class="hero-overlay">
       <div class="container hero-content">
-        <h2 id="hero-title">${escapeHtml(formatHeroTitle(hero.title))}</h2>
-        <p>${escapeHtml(hero.subtitle)}</p>
-        <a class="btn btn-primary" href="${escapeAttr(hero.ctaTarget || "#contact")}">${escapeHtml(hero.ctaText)}</a>
+        <h2 id="hero-title" class="${isCustomHomeHeroTitle ? "hero-title-custom" : ""}">${heroTitleMarkup}</h2>
+        <a class="btn btn-primary ${isCustomHomeHeroTitle ? "hero-custom-cta" : ""}" href="${escapeAttr(hero.ctaTarget || "#contact")}">${escapeHtml(hero.ctaText)}</a>
       </div>
     </div>
   `;
@@ -1228,6 +1229,23 @@ function formatHeroTitle(title) {
   const normalized = String(title ?? "").trim().replace(/[.]$/, "");
   if (!normalized) return "";
   return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+}
+
+function formatHeroTitleMarkup(title, page) {
+  const formattedTitle = formatHeroTitle(title);
+  if (!formattedTitle) return "";
+
+  if (isSplitHomeHeroTitle(formattedTitle, page)) {
+    return `<span class="hero-line hero-line-main">Jízda na <span class="hero-koni">KONI</span></span>
+<span class="hero-line hero-line-pro">pro</span>
+<span class="hero-line hero-line-kids">děti i dospělé</span>`;
+  }
+
+  return escapeHtml(formattedTitle).replaceAll("\n", "<br>");
+}
+
+function isSplitHomeHeroTitle(title, page) {
+  return page === "home" && formatHeroTitle(title).toLowerCase() === "jízda na koni pro děti i dospělé";
 }
 
 init();
