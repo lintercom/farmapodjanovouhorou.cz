@@ -1,4 +1,5 @@
 import { loadData, saveData, exportData, importDataFromFile } from "./storage.js";
+import { uiPatterns, addPatternClasses } from "./uiTokens.js";
 
 const PREFERRED_FONT_STACK = "'Avenir Next', 'Avenir', 'Helvetica Neue', Helvetica, Arial, sans-serif";
 const VALID_USER = "admin";
@@ -226,7 +227,7 @@ function renderAbout(about) {
   const el = document.getElementById("about");
   if (!el) return;
   el.innerHTML = `
-    <article class="text-card card border-0 shadow-sm">
+    <article class="text-card ${uiPatterns.FloatingPanel}">
       <h2 class="section-title">${escapeHtml(formatSectionTitle(about.title))}</h2>
       <p class="section-lead">${escapeHtml(about.text)}</p>
     </article>
@@ -245,11 +246,11 @@ function renderServices(services) {
   const cards = filteredItems
     .map(
       (item) => `
-    <article class="card h-100 border-0 shadow-sm">
-      <div class="card-body d-flex flex-column">
+    <article class="card ${uiPatterns.FloatingServiceCard}">
+      <div class="card-body">
         <h3>${escapeHtml(item.title)}</h3>
         <p>${escapeHtml(item.description)}</p>
-        <strong>${escapeHtml(item.price)}</strong>
+        <strong class="block mt-1">${escapeHtml(item.price)}</strong>
         <a class="link-inline" href="${getServiceLink(item)}">více <span aria-hidden="true">→</span></a>
       </div>
     </article>
@@ -345,7 +346,7 @@ function renderServices(services) {
       .map((group, index) => {
         const reverseClass = index % 2 === 1 ? "service-feature-reverse" : "";
         return `
-          <article class="service-feature ${reverseClass} card border-0 shadow-sm">
+          <article class="service-feature ${reverseClass} ${uiPatterns.FloatingServiceCard}">
             <div class="service-feature-body">
               <h3>${escapeHtml(group.title)}</h3>
               <p>${escapeHtml(group.summary)}</p>
@@ -357,7 +358,9 @@ function renderServices(services) {
       .join("");
 
     el.innerHTML = `
-      <div class="home-service-stack">${features}</div>
+      <div class="${uiPatterns.FloatingPanel}">
+        <div class="home-service-stack">${features}</div>
+      </div>
     `;
     return;
   }
@@ -376,7 +379,7 @@ function renderHorses(horses) {
   const cards = horses.items
     .map(
       (horse, index) => `
-    <article class="card horse-card h-100 border-0 shadow-sm ${page === "nasi-kone" ? "horse-card-clickable" : ""}" ${page === "nasi-kone" ? `data-horse-card="${index}"` : ""}>
+    <article class="card horse-card ${uiPatterns.FloatingServiceCard} ${page === "nasi-kone" ? "horse-card-clickable" : ""}" ${page === "nasi-kone" ? `data-horse-card="${index}"` : ""}>
       <div class="card-body">
         <h3>${escapeHtml(horse.name)}</h3>
         <p><strong>Plemeno:</strong> ${escapeHtml(horse.breed)} | <strong>Věk:</strong> ${escapeHtml(horse.age)}</p>
@@ -403,7 +406,7 @@ function renderHorses(horses) {
       .slice(0, 3)
       .map(
         (horse) => `
-          <article class="card horse-card h-100 border-0 shadow-sm">
+          <article class="card horse-card ${uiPatterns.FloatingServiceCard}">
             <div class="card-body">
               <h3>${escapeHtml(horse.name)}</h3>
               <p><strong>Plemeno:</strong> ${escapeHtml(horse.breed)}</p>
@@ -414,10 +417,12 @@ function renderHorses(horses) {
       .join("");
 
     el.innerHTML = `
-      <div class="home-strip-head">
-        <a class="link-inline" href="nasi-kone.html">zobrazit všechny koně <span aria-hidden="true">→</span></a>
+      <div class="${uiPatterns.FloatingPanel}">
+        <div class="home-strip-head">
+          <a class="link-inline" href="nasi-kone.html">zobrazit všechny koně <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="home-horse-strip">${homeCards}</div>
       </div>
-      <div class="home-horse-strip">${homeCards}</div>
     `;
     return;
   }
@@ -435,7 +440,7 @@ function renderGallery(gallery) {
   const items = gallery.images
     .map(
       (item, index) => `
-    <article class="action-card card border-0 shadow-sm h-100">
+    <article class="action-card ${uiPatterns.FloatingServiceCard}">
       <div class="action-card-body">
         <h3>${escapeHtml(`Akce #${index + 1}`)}</h3>
         <p>${escapeHtml(item.alt || "Momentka z farmy.")}</p>
@@ -458,7 +463,7 @@ function renderActions(gallery) {
   const cards = gallery.images
     .map(
       (item, index) => `
-        <article class="action-card card border-0 shadow-sm h-100">
+        <article class="action-card ${uiPatterns.FloatingServiceCard}">
           <div class="action-card-body">
             <h3>${escapeHtml(`Příběh z farmy #${index + 1}`)}</h3>
             <p>${escapeHtml(item.alt || "Momentka z každodenního života na farmě.")}</p>
@@ -483,7 +488,7 @@ function renderHomeActions(gallery) {
   const items = latest
     .map(
       (item, index) => `
-        <article class="home-action-item card border-0 shadow-sm h-100">
+        <article class="home-action-item ${uiPatterns.FloatingServiceCard}">
           <div class="home-action-body">
             <h3>${escapeHtml(`Akce #${latest.length - index}`)}</h3>
             <p>${escapeHtml(item.alt || "Momentka z dění na farmě.")}</p>
@@ -495,7 +500,9 @@ function renderHomeActions(gallery) {
     .join("");
 
   el.innerHTML = `
-    <div class="home-actions-list">${items}</div>
+    <div class="${uiPatterns.FloatingPanel}">
+      <div class="home-actions-list">${items}</div>
+    </div>
   `;
 }
 
@@ -505,10 +512,10 @@ function renderVouchers(vouchers) {
   const items = vouchers.items
     .map(
       (voucher) => `
-    <article class="voucher-card card border-0 shadow-sm h-100">
+    <article class="voucher-card ${uiPatterns.FloatingServiceCard}">
       <h3>${escapeHtml(voucher.name)}</h3>
       <p>${escapeHtml(voucher.description)}</p>
-      <strong>${escapeHtml(voucher.price)}</strong>
+      <strong class="block mt-1">${escapeHtml(voucher.price)}</strong>
     </article>
   `
     )
@@ -533,13 +540,13 @@ function renderContact(contact) {
         <p><strong>Email:</strong> <a href="mailto:${escapeAttr(contact.email)}">${escapeHtml(contact.email)}</a></p>
         <a class="link-inline" href="https://mapy.cz" target="_blank" rel="noreferrer">zobrazit na mapě <span aria-hidden="true">→</span></a>
       </address>
-      <form id="contact-form" class="contact-form vstack gap-2" novalidate aria-describedby="contact-success">
+      <form id="contact-form" class="contact-form vstack gap-2 ${uiPatterns.FloatingPanel}" novalidate aria-describedby="contact-success">
         <label for="contact-name">Jméno</label>
-        <input id="contact-name" class="form-control" type="text" name="name" required />
+        <input id="contact-name" class="form-control ${uiPatterns.FormField}" type="text" name="name" required />
         <label for="contact-email">Email</label>
-        <input id="contact-email" class="form-control" type="email" name="email" required />
+        <input id="contact-email" class="form-control ${uiPatterns.FormField}" type="email" name="email" required />
         <label for="contact-message">Zpráva</label>
-        <textarea id="contact-message" class="form-control" name="message" rows="4" required></textarea>
+        <textarea id="contact-message" class="form-control ${uiPatterns.FormField}" name="message" rows="4" required></textarea>
         <button class="btn btn-primary" type="submit">Odeslat</button>
         <p class="success-msg" id="contact-success" aria-live="polite"></p>
       </form>
@@ -625,7 +632,7 @@ function renderHighlights() {
       ${items
         .map(
           (item) => `
-            <a class="highlight-item card border-0 shadow-sm h-100" href="${item.target}">
+            <a class="highlight-item ${uiPatterns.FloatingServiceCard}" href="${item.target}">
               <h3>${escapeHtml(item.title)}</h3>
               <p>${escapeHtml(item.text)}</p>
             </a>
@@ -1016,7 +1023,7 @@ function renderRepeater(key) {
         : "";
 
       return `
-        <div class="repeater-item card border-0 shadow-sm">
+        <div class="repeater-item ${uiPatterns.MinimalContentCard}">
           <div class="repeater-item-head">
             <strong>${config.itemTitle} #${index + 1}</strong>
             <button type="button" class="btn btn-ghost" data-delete-item="true" data-repeater-key="${key}" data-index="${index}">Smazat</button>
@@ -1031,36 +1038,70 @@ function renderRepeater(key) {
 }
 
 function applyBootstrapUi() {
+  const skipNav = (el) => el.closest(".nav, .site-header");
+
+  document.querySelectorAll("main section.section").forEach((s) => {
+    if (skipNav(s)) return;
+    addPatternClasses(s, uiPatterns.SectionContainer);
+  });
+
+  document.querySelectorAll(".text-card, .service-feature, .action-card, .home-action-item, .voucher-card, .highlight-item").forEach((card) => {
+    if (skipNav(card)) return;
+    addPatternClasses(card, uiPatterns.FloatingServiceCard);
+  });
+
+  document.querySelectorAll(".card.horse-card, .card.h-100").forEach((card) => {
+    if (skipNav(card)) return;
+    addPatternClasses(card, uiPatterns.FloatingServiceCard);
+  });
+
+  document.querySelectorAll(".btn.btn-primary").forEach((btn) => {
+    if (skipNav(btn)) return;
+    addPatternClasses(btn, uiPatterns.PrimaryButton);
+    btn.classList.add("bg-[#4C7A5A]", "hover:bg-[#3f654a]", "border-0");
+  });
+  document.querySelectorAll(".btn.btn-outline").forEach((btn) => {
+    if (skipNav(btn)) return;
+    addPatternClasses(btn, uiPatterns.SecondaryButton);
+    btn.classList.add("border-[#4C7A5A]", "text-[#4C7A5A]", "hover:bg-[#4C7A5A]/10");
+  });
+  document.querySelectorAll(".btn.btn-ghost").forEach((btn) => {
+    if (skipNav(btn)) return;
+    btn.classList.add("rounded-lg", "px-4", "py-2", "transition-all", "duration-200", "ease-out");
+  });
+
+  document.querySelectorAll(".section-title").forEach((t) => {
+    if (skipNav(t)) return;
+    t.classList.add("text-2xl", "md:text-3xl", "font-bold", "tracking-tight", "text-[#2E2B27]");
+  });
+
+  document.querySelectorAll(".section-lead").forEach((p) => {
+    if (skipNav(p)) return;
+    p.classList.add("text-base", "md:text-lg", "leading-relaxed", "text-[#6B645C]");
+  });
+
   document.querySelectorAll("input, textarea, select").forEach((field) => {
     if (!(field instanceof HTMLElement)) return;
-    if (field.closest(".nav")) return;
+    if (skipNav(field)) return;
 
     if (field instanceof HTMLInputElement) {
       if (field.type === "hidden") return;
       if (field.type === "color") {
-        field.classList.add("form-control", "form-control-color");
+        field.classList.add("form-control", "form-control-color", "rounded-xl");
         return;
       }
       if (field.type === "checkbox" || field.type === "radio") {
         field.classList.add("form-check-input");
         return;
       }
-      field.classList.add("form-control");
-      return;
     }
-
     field.classList.add("form-control");
+    addPatternClasses(field, uiPatterns.FormField);
   });
 
-  document.querySelectorAll(".btn.btn-outline").forEach((button) => {
-    button.classList.add("btn-outline-secondary");
-  });
-  document.querySelectorAll(".btn.btn-ghost").forEach((button) => {
-    button.classList.add("btn-light");
-  });
-
-  document.querySelectorAll(".text-card, .service-feature, .action-card, .home-action-item, .voucher-card, .repeater-item, .modal-card").forEach((card) => {
-    card.classList.add("card", "border-0", "shadow-sm");
+  /* Footer blocks */
+  document.querySelectorAll(".site-footer .footer-inner .lock-btn").forEach((lock) => {
+    lock.classList.add("shrink-0");
   });
 }
 
