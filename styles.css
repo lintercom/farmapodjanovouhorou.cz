@@ -1300,6 +1300,19 @@ body[data-page="home"] #contact > * {
   z-index: 1;
 }
 
+body[data-page="home"] #services > div:first-child {
+  transform: translateX(calc((100vw - 100%) / -2));
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-top: clamp(-20vh, -25vh, -16vh);
+  position: relative;
+  z-index: 2;
+}
+
+body[data-page="home"] #gallery > div:first-child {
+  transform: translateX(calc((100vw - 100%) / 2));
+}
+
 body[data-page="kontakt"] #contact.section.container {
   padding-top: clamp(4.8rem, 7vw, 5.8rem);
 }
