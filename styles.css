@@ -1659,10 +1659,10 @@ body[data-page="kontakt"] #contact.section.container {
   }
 
   body[data-page="home"] #services > div:first-child {
-    width: 100vw;
-    max-width: 100vw;
+    width: min(94vw, 34.5rem);
+    max-width: min(94vw, 34.5rem);
     transform: none;
-    margin-left: calc(50% - 50vw);
+    margin-left: 0;
     margin-right: auto;
     margin-top: clamp(-8.5rem, -14vh, -5.2rem);
     border-top-left-radius: 0;
