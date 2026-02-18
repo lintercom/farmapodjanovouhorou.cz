@@ -1645,11 +1645,17 @@ body[data-page="kontakt"] #contact.section.container {
     margin-left: 0;
   }
 
-  body[data-page="home"] #services > div:first-child,
+  body[data-page="home"] #services > div:first-child {
+    transform: translateX(calc((100vw - 100%) / -2));
+    margin-top: clamp(-8.5rem, -14vh, -5.2rem);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
   body[data-page="home"] #home-actions > div:first-child {
-    transform: none;
+    transform: translateX(calc((100vw - 100%) / 2));
     margin-top: 0;
-    border-radius: var(--radius-card);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
   }
   body[data-page="home"] #horses > div:first-child {
     transform: none;
