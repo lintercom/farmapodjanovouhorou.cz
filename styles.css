@@ -1663,10 +1663,11 @@ body[data-page="kontakt"] #contact.section.container {
     max-width: min(94vw, 34.5rem);
     transform: none;
     margin-left: calc(50% - 50vw);
-    margin-right: auto;
+    margin-right: 0;
     margin-top: clamp(-8.5rem, -14vh, -5.2rem);
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    overflow: hidden;
   }
   body[data-page="home"] #home-actions > div:first-child {
     width: min(94vw, 34.5rem);
@@ -1843,15 +1844,19 @@ body[data-page="kontakt"] #contact.section.container {
   .home-action-item { grid-template-columns: 1fr; }
 
   body[data-page="home"] .service-feature {
-    width: min(94vw, 34.5rem);
+    width: 100%;
+    max-width: 100%;
     margin-left: 0;
-    margin-right: auto;
+    margin-right: 0;
     padding: 0.95rem 0.95rem 1rem;
+    box-sizing: border-box;
   }
   body[data-page="home"] .service-feature-reverse {
-    width: min(94vw, 34.5rem);
-    margin-left: auto;
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
     margin-right: 0;
+    box-sizing: border-box;
   }
   body[data-page="home"] .service-feature-body h3 {
     font-size: clamp(1.35rem, 5.7vw, 1.7rem);
