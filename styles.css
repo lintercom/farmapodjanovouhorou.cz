@@ -1844,18 +1844,18 @@ body[data-page="kontakt"] #contact.section.container {
   .home-action-item { grid-template-columns: 1fr; }
 
   body[data-page="home"] .service-feature {
-    width: calc(100% - 0.9rem);
-    max-width: calc(100% - 0.9rem);
+    width: calc(100% - 0.45rem);
+    max-width: calc(100% - 0.45rem);
     margin-left: 0.45rem;
-    margin-right: 0.45rem;
+    margin-right: 0;
     padding: 0.95rem 0.95rem 1rem;
     box-sizing: border-box;
   }
   body[data-page="home"] .service-feature-reverse {
-    width: calc(100% - 0.9rem);
-    max-width: calc(100% - 0.9rem);
+    width: calc(100% - 0.45rem);
+    max-width: calc(100% - 0.45rem);
     margin-left: 0.45rem;
-    margin-right: 0.45rem;
+    margin-right: 0;
     box-sizing: border-box;
   }
   body[data-page="home"] .service-feature-body h3 {
@@ -1938,7 +1938,10 @@ body[data-page="kontakt"] #contact.section.container {
 
   body[data-page="home"] .service-feature,
   body[data-page="home"] .service-feature-reverse {
-    width: min(95vw, 31.2rem);
+    width: calc(100% - 0.45rem);
+    max-width: calc(100% - 0.45rem);
+    margin-left: 0.45rem;
+    margin-right: 0;
   }
   body[data-page="home"] .service-feature-body h3 {
     font-size: clamp(1.22rem, 6.2vw, 1.5rem);
