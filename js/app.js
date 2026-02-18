@@ -45,6 +45,10 @@ if (persistedData?.settings) {
 let draftData = clone(persistedData);
 let lastFocusedElement = null;
 let activeHorseIndex = 0;
+let activeHorsePhotoIndex = 0;
+let homeHorseStartIndex = 0;
+const HOME_HORSES_VISIBLE_COUNT = 3;
+let didHandleHorseDeepLink = false;
 
 const fieldMap = {
   "cms-site-name": ["settings", "siteName"],
@@ -378,9 +382,17 @@ function renderHorses(horses) {
   const page = document.body.dataset.page || "home";
 
   const cards = horses.items
-    .map(
-      (horse, index) => `
+    .map((horse, index) => {
+      const imageSrc = getHorseImageSource(horse);
+      const media = imageSrc
+        ? `
+      <div class="horse-card-media">
+        <img src="${escapeAttr(imageSrc)}" alt="${escapeAttr(horse.name || "Kůň na farmě")}" loading="lazy" />
+      </div>`
+        : "";
+      return `
     <article class="card horse-card ${uiPatterns.FloatingServiceCard} ${page === "nasi-kone" ? "horse-card-clickable" : ""}" ${page === "nasi-kone" ? `data-horse-card="${index}"` : ""}>
+      ${media}
       <div class="card-body">
         <h3>${escapeHtml(horse.name)}</h3>
         <p><strong>Plemeno:</strong> ${escapeHtml(horse.breed)} | <strong>Věk:</strong> ${escapeHtml(horse.age)}</p>
@@ -388,8 +400,8 @@ function renderHorses(horses) {
         ${page === "nasi-kone" ? `<button class="btn btn-outline horse-open-btn" type="button">Detail koně</button>` : ""}
       </div>
     </article>
-  `
-    )
+  `;
+    })
     .join("");
 
   if (page === "nasi-kone") {
@@ -399,29 +411,99 @@ function renderHorses(horses) {
       <div class="card-grid">${cards}</div>
     `;
     ensureHorseModal();
+    if (!didHandleHorseDeepLink) {
+      didHandleHorseDeepLink = true;
+      openHorseFromUrlParam();
+    }
     return;
   }
 
   if (page === "home") {
+    const total = horses.items.length;
+    const visibleCount = Math.min(HOME_HORSES_VISIBLE_COUNT, total);
+    const maxStartIndex = Math.max(total - visibleCount, 0);
+    homeHorseStartIndex = Math.min(Math.max(homeHorseStartIndex, 0), maxStartIndex);
+
     const homeCards = horses.items
-      .slice(0, 3)
-      .map(
-        (horse) => `
+      .map((horse, index) => {
+        const imageSrc = getHorseImageSource(horse);
+        const shortDescription = formatHorseCardSummary(horse.description);
+        return `
           <article class="card horse-card ${uiPatterns.FloatingServiceCard}">
+            ${imageSrc
+              ? `<div class="horse-card-media">
+              <img src="${escapeAttr(imageSrc)}" alt="${escapeAttr(horse.name || "Kůň na farmě")}" loading="lazy" />
+            </div>`
+              : ""}
             <div class="card-body">
               <h3>${escapeHtml(horse.name)}</h3>
-              <p><strong>Plemeno:</strong> ${escapeHtml(horse.breed)}</p>
+              <p class="horse-card-meta"><strong>Plemeno:</strong> ${escapeHtml(horse.breed)}</p>
+              <p class="horse-card-meta"><strong>Věk:</strong> ${escapeHtml(horse.age)}</p>
+              <p class="horse-card-summary">${escapeHtml(shortDescription)}</p>
+              <a class="btn btn-outline horse-card-cta" href="nasi-kone.html?horse=${index}">Zobrazit</a>
             </div>
           </article>
-        `
-      )
+        `;
+      })
       .join("");
+
+    const canSlide = total > HOME_HORSES_VISIBLE_COUNT;
 
     el.innerHTML = `
       <div class="${uiPatterns.FloatingPanel}">
-        <div class="home-horse-strip">${homeCards}</div>
+        <div class="home-horse-carousel">
+          <button class="btn btn-outline home-horse-nav-btn home-horse-nav-btn-prev" type="button" aria-label="Předchozí koně" data-home-horses-prev ${canSlide ? "" : "disabled"}>
+            ←
+          </button>
+          <div class="home-horse-viewport">
+            <div class="home-horse-track">${homeCards}</div>
+          </div>
+          <button class="btn btn-outline home-horse-nav-btn home-horse-nav-btn-next" type="button" aria-label="Další koně" data-home-horses-next ${canSlide ? "" : "disabled"}>
+            →
+          </button>
+        </div>
       </div>
     `;
+
+    const prevBtn = el.querySelector("[data-home-horses-prev]");
+    const nextBtn = el.querySelector("[data-home-horses-next]");
+    const track = el.querySelector(".home-horse-track");
+    const applySlidePosition = (animate = true) => {
+      if (!track) return;
+      if (!animate) {
+        track.style.transition = "none";
+      } else {
+        track.style.removeProperty("transition");
+      }
+      const firstCard = track.querySelector(".horse-card");
+      const trackStyles = window.getComputedStyle(track);
+      const gapValue = Number.parseFloat(trackStyles.columnGap || trackStyles.gap || "0");
+      const cardWidth = firstCard instanceof HTMLElement ? firstCard.getBoundingClientRect().width : 0;
+      const offsetPx = homeHorseStartIndex * (cardWidth + (Number.isNaN(gapValue) ? 0 : gapValue));
+      track.style.transform = `translateX(-${offsetPx}px)`;
+      if (!animate) {
+        track.getBoundingClientRect();
+        track.style.removeProperty("transition");
+      }
+      if (prevBtn) prevBtn.disabled = !canSlide || homeHorseStartIndex <= 0;
+      if (nextBtn) nextBtn.disabled = !canSlide || homeHorseStartIndex >= maxStartIndex;
+    };
+    applySlidePosition(false);
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        if (!canSlide) return;
+        homeHorseStartIndex = Math.max(homeHorseStartIndex - 1, 0);
+        applySlidePosition(true);
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        if (!canSlide) return;
+        homeHorseStartIndex = Math.min(homeHorseStartIndex + 1, maxStartIndex);
+        applySlidePosition(true);
+      });
+    }
     return;
   }
 
@@ -928,6 +1010,15 @@ function bindGlobalClicks() {
       moveHorse(1);
       return;
     }
+
+    const horseThumb = target.closest("[data-horse-photo-index]");
+    if (horseThumb) {
+      const nextPhotoIndex = Number(horseThumb.getAttribute("data-horse-photo-index"));
+      if (!Number.isNaN(nextPhotoIndex)) {
+        activeHorsePhotoIndex = nextPhotoIndex;
+        syncHorseModal();
+      }
+    }
   });
 
   document.addEventListener("keydown", (event) => {
@@ -1114,6 +1205,10 @@ function ensureHorseModal() {
   modal.innerHTML = `
     <div class="horse-modal-card">
       <button class="close-btn horse-modal-close" aria-label="Zavřít detail koně" data-close-horse-modal="true">×</button>
+      <div class="horse-modal-media">
+        <img id="horse-modal-image" alt="Fotka koně" />
+        <div id="horse-modal-thumbs" class="horse-modal-thumbs" aria-label="Další fotky koně"></div>
+      </div>
       <div class="horse-modal-content">
         <h3 id="horse-modal-name"></h3>
         <p id="horse-modal-meta"></p>
@@ -1132,6 +1227,7 @@ function openHorseModal(index) {
   const horses = draftData.sections.horses.items;
   if (!horses[index]) return;
   activeHorseIndex = index;
+  activeHorsePhotoIndex = 0;
   syncHorseModal();
   const modal = document.getElementById("horse-modal");
   if (!modal) return;
@@ -1155,6 +1251,7 @@ function moveHorse(step) {
   const horses = draftData.sections.horses.items;
   if (horses.length === 0) return;
   activeHorseIndex = (activeHorseIndex + step + horses.length) % horses.length;
+  activeHorsePhotoIndex = 0;
   syncHorseModal();
 }
 
@@ -1164,10 +1261,39 @@ function syncHorseModal() {
   const name = document.getElementById("horse-modal-name");
   const meta = document.getElementById("horse-modal-meta");
   const description = document.getElementById("horse-modal-description");
-  if (!name || !meta || !description) return;
+  const image = document.getElementById("horse-modal-image");
+  const thumbs = document.getElementById("horse-modal-thumbs");
+  if (!name || !meta || !description || !image || !thumbs) return;
   name.textContent = horse.name;
   meta.textContent = `Plemeno: ${horse.breed} | Věk: ${horse.age}`;
   description.textContent = horse.description;
+
+  const photos = getHorsePhotos(horse);
+  if (photos.length === 0) {
+    image.removeAttribute("src");
+    thumbs.innerHTML = "";
+    return;
+  }
+
+  const safePhotoIndex = Math.min(Math.max(activeHorsePhotoIndex, 0), photos.length - 1);
+  activeHorsePhotoIndex = safePhotoIndex;
+  image.src = photos[safePhotoIndex];
+  image.alt = horse.name ? `Fotka koně ${horse.name}` : "Fotka koně";
+
+  thumbs.innerHTML = photos
+    .map(
+      (src, index) => `
+      <button
+        type="button"
+        class="horse-modal-thumb ${index === safePhotoIndex ? "is-active" : ""}"
+        data-horse-photo-index="${index}"
+        aria-label="Zobrazit fotku ${index + 1}"
+      >
+        <img src="${escapeAttr(src)}" alt="" />
+      </button>
+    `
+    )
+    .join("");
 }
 
 function getServiceLink(item) {
@@ -1229,6 +1355,45 @@ function formatHeroTitle(title) {
   const normalized = String(title ?? "").trim().replace(/[.]$/, "");
   if (!normalized) return "";
   return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+}
+
+function getHorseImageSource(horse) {
+  const directImage = String(horse?.image || "").trim();
+  if (directImage) return directImage;
+  const firstPhoto = String(horse?.photos?.[0] || "").trim();
+  if (firstPhoto) return firstPhoto;
+  return "";
+}
+
+function getHorsePhotos(horse) {
+  const photos = Array.isArray(horse?.photos) ? horse.photos.map((item) => String(item || "").trim()).filter(Boolean) : [];
+  if (photos.length > 0) return photos;
+  const fallback = getHorseImageSource(horse);
+  return fallback ? [fallback] : [];
+}
+
+function formatHorseCardSummary(text) {
+  const raw = String(text || "").trim();
+  if (!raw) return "Klidný parťák pro práci ze země i jízdu v terénu.";
+  if (raw.length <= 115) return raw;
+  return `${raw.slice(0, 112).trimEnd()}...`;
+}
+
+function openHorseFromUrlParam() {
+  const page = document.body.dataset.page || "";
+  if (page !== "nasi-kone") return;
+  const horses = draftData?.sections?.horses?.items || [];
+  if (!Array.isArray(horses) || horses.length === 0) return;
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const value = searchParams.get("horse");
+  if (value === null) return;
+
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) return;
+  if (parsed < 0 || parsed >= horses.length) return;
+
+  openHorseModal(parsed);
 }
 
 function formatHeroTitleMarkup(title, page) {

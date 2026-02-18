@@ -766,17 +766,184 @@ body[data-page="sluzby"] .card-body p { font-size: 0.92rem; }
 .horse-card-clickable { cursor: pointer; }
 .horse-open-btn { margin-top: 0.65rem; }
 
-.home-strip-head {
+.horse-card {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 0.8rem;
+  flex-direction: row;
+  align-items: stretch;
+  min-height: clamp(13.8rem, 23vw, 17.2rem);
+  gap: 0;
+  padding: 0;
 }
 
-.home-horse-strip {
+.horse-card .card-body {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.3rem;
+  align-content: center;
+  gap: 0.35rem;
+  flex: 1 1 auto;
+}
+
+.horse-card-media {
+  border-right: 0;
+  border-bottom: 0;
+  background: color-mix(in srgb, var(--bg-card), #fff 12%);
+  display: block;
+  flex: 0 0 min(35%, 12.5rem);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  margin-block: -1px;
+  margin-left: -1px;
+}
+
+.horse-card-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+body[data-page="home"] .horse-card-media img {
+  max-height: none;
+}
+
+body[data-page="nasi-kone"] .horse-card-media {
+  flex-basis: min(36%, 13.4rem);
+}
+
+body[data-page="nasi-kone"] .horse-card-media img {
+  max-height: none;
+}
+
+body[data-page="home"] .horse-card .card-body {
+  padding: clamp(0.85rem, 1.8vw, 1.1rem);
+}
+
+body[data-page="home"] .horse-card .card-body p {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+body[data-page="home"] #horses > div:first-child {
+  overflow: visible;
+}
+
+body[data-page="home"] .horse-card .card-body h3 {
+  margin-bottom: 0.2rem;
+}
+
+.horse-card-meta {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--text-2);
+  line-height: 1.35;
+}
+
+.horse-card-summary {
+  margin: 0.2rem 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.horse-card-cta {
+  margin-top: 0.45rem;
+  justify-self: start;
+  --bs-btn-font-size: 0.8rem;
+  --bs-btn-padding-x: 0.8rem;
+  --bs-btn-padding-y: 0.4rem;
+  border-radius: var(--radius-full);
+}
+
+.home-horse-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-inline: clamp(2.1rem, 4.8vw, 3.1rem);
+  width: 100%;
+  overflow: visible;
+}
+
+.home-horse-viewport {
+  overflow-x: hidden;
+  overflow-y: visible;
+  width: 100%;
+  border-radius: 0;
+  padding-block: clamp(0.9rem, 1.8vw, 1.2rem);
+  margin-block: clamp(-0.9rem, -1.8vw, -1.2rem);
+}
+
+.home-horse-track {
+  --home-horse-gap: clamp(0.8rem, 1.6vw, 1.2rem);
+  display: flex;
+  gap: var(--home-horse-gap);
+  transition: transform 0.42s ease;
+  will-change: transform;
+}
+
+.home-horse-track .horse-card {
+  flex: 0 0 calc((100% - (var(--home-horse-gap) * 2)) / 3);
+  box-sizing: border-box;
+  padding-inline: 0;
+}
+
+.home-horse-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.45rem;
+  min-width: 2.45rem;
+  height: 2.45rem;
+  border-radius: var(--radius-full);
+  padding: 0;
+  font-size: 1.05rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--bg-card), transparent 35%);
+  border-color: color-mix(in srgb, var(--line), transparent 15%);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(6px);
+  transition: opacity 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.home-horse-nav-btn-prev { left: 0.2rem; }
+.home-horse-nav-btn-next { right: 0.2rem; }
+
+.home-horse-carousel:hover .home-horse-nav-btn,
+.home-horse-carousel:focus-within .home-horse-nav-btn {
+  opacity: 0.88;
+  pointer-events: auto;
+  transform: translateY(-50%) scale(1);
+}
+
+.home-horse-carousel:hover .home-horse-nav-btn:hover,
+.home-horse-carousel:focus-within .home-horse-nav-btn:hover {
+  opacity: 1;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
+}
+
+.home-horse-nav-btn:disabled {
+  opacity: 0 !important;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+@media (hover: none) {
+  .home-horse-nav-btn {
+    opacity: 0.88;
+    pointer-events: auto;
+  }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1066,6 +1233,56 @@ address p { margin: 0 0 0.5rem; }
   padding: clamp(1rem, 2vw, 1.4rem);
 }
 
+.horse-modal-media {
+  display: grid;
+  gap: 0.6rem;
+}
+
+#horse-modal-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg-card), #fff 8%);
+}
+
+.horse-modal-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.horse-modal-thumb {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0;
+  background: var(--bg-card);
+  width: 4rem;
+  height: 2.8rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.horse-modal-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.horse-modal-thumb:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.horse-modal-thumb.is-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent), transparent 25%);
+}
+
 .horse-modal-content h3 { margin: 0 0 0.35rem; }
 .horse-modal-content p { color: var(--text-2); }
 
@@ -1309,8 +1526,10 @@ body[data-page="home"] #services > div:first-child {
   z-index: 2;
 }
 
-body[data-page="home"] #gallery > div:first-child {
+body[data-page="home"] #home-actions > div:first-child {
   transform: translateX(calc((100vw - 100%) / 2));
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 body[data-page="kontakt"] #contact.section.container {
@@ -1446,7 +1665,9 @@ body[data-page="kontakt"] #contact.section.container {
   .service-feature-reverse,
   .home-action-item { grid-template-columns: 1fr; width: 100%; }
 
-  .home-horse-strip { grid-template-columns: 1fr; }
+  .home-horse-carousel { padding-inline: 2rem; }
+  .home-horse-nav-btn { width: 2.2rem; min-width: 2.2rem; height: 2.2rem; }
+  .home-horse-track .horse-card { padding-inline: 0.55rem; }
   .footer-home { grid-template-columns: 1fr; }
   .horse-modal-card { grid-template-columns: 1fr; }
 
