@@ -420,7 +420,7 @@ function renderHorses(horses) {
 
   if (page === "home") {
     const total = horses.items.length;
-    const visibleCount = Math.min(HOME_HORSES_VISIBLE_COUNT, total);
+    const visibleCount = Math.min(getHomeHorsesVisibleCount(), total);
     const maxStartIndex = Math.max(total - visibleCount, 0);
     homeHorseStartIndex = Math.min(Math.max(homeHorseStartIndex, 0), maxStartIndex);
 
@@ -447,7 +447,7 @@ function renderHorses(horses) {
       })
       .join("");
 
-    const canSlide = total > HOME_HORSES_VISIBLE_COUNT;
+    const canSlide = total > visibleCount;
 
     el.innerHTML = `
       <div class="${uiPatterns.FloatingPanel}">
@@ -1370,6 +1370,12 @@ function getHorsePhotos(horse) {
   if (photos.length > 0) return photos;
   const fallback = getHorseImageSource(horse);
   return fallback ? [fallback] : [];
+}
+
+function getHomeHorsesVisibleCount() {
+  if (window.matchMedia("(max-width: 920px)").matches) return 1;
+  if (window.matchMedia("(max-width: 1200px)").matches) return 2;
+  return HOME_HORSES_VISIBLE_COUNT;
 }
 
 function formatHorseCardSummary(text) {

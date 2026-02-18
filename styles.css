@@ -434,6 +434,24 @@ a { color: inherit; text-decoration: none; }
   }
 }
 
+@media (max-width: 680px) {
+  .horse-card {
+    flex-direction: column;
+    min-height: 0;
+  }
+  .horse-card-media {
+    flex: 0 0 auto;
+    aspect-ratio: 16 / 9;
+    margin: -1px -1px 0 -1px;
+  }
+  .horse-card .card-body {
+    padding: 0.8rem;
+  }
+  .home-horse-carousel {
+    padding-inline: 1.7rem;
+  }
+}
+
 .hero-content p {
   font-size: clamp(1.05rem, 1.5vw, 1.25rem);
   max-width: 38rem;
@@ -879,6 +897,7 @@ body[data-page="home"] .horse-card .card-body h3 {
 }
 
 .home-horse-track {
+  --home-horses-visible: 3;
   --home-horse-gap: clamp(0.8rem, 1.6vw, 1.2rem);
   display: flex;
   gap: var(--home-horse-gap);
@@ -887,7 +906,7 @@ body[data-page="home"] .horse-card .card-body h3 {
 }
 
 .home-horse-track .horse-card {
-  flex: 0 0 calc((100% - (var(--home-horse-gap) * 2)) / 3);
+  flex: 0 0 calc((100% - (var(--home-horse-gap) * (var(--home-horses-visible) - 1))) / var(--home-horses-visible));
   box-sizing: border-box;
   padding-inline: 0;
 }
@@ -943,6 +962,12 @@ body[data-page="home"] .horse-card .card-body h3 {
   .home-horse-nav-btn {
     opacity: 0.88;
     pointer-events: auto;
+  }
+}
+
+@media (max-width: 1200px) {
+  .home-horse-track {
+    --home-horses-visible: 2;
   }
 }
 
@@ -1573,6 +1598,93 @@ body[data-page="kontakt"] #contact.section.container {
    RESPONSIVE — MOBILE
    ═══════════════════════════════════════════════════ */
 @media (max-width: 920px) {
+  .section {
+    padding-block: clamp(1.1rem, 4.5vw, 1.9rem);
+  }
+  .section.container {
+    width: min(100%, calc(100% - 1rem));
+  }
+
+  .section-title {
+    font-size: clamp(1.35rem, 6vw, 1.85rem);
+    margin-bottom: 0.45rem;
+  }
+  .section-lead {
+    font-size: clamp(0.95rem, 3.9vw, 1.04rem);
+    line-height: 1.55;
+  }
+
+  .hero-overlay { min-height: 72vh; }
+  .hero { min-height: 72vh; }
+  .hero-content {
+    padding-top: clamp(4.4rem, 9vh, 6.2rem);
+    padding-bottom: clamp(1.2rem, 3.4vh, 2rem);
+  }
+  #hero-title.hero-title-custom {
+    margin-left: 0;
+    max-width: 100%;
+  }
+  #hero-title .hero-line {
+    font-size: clamp(2rem, 9vw, 3rem);
+  }
+  #hero-title .hero-line-pro,
+  #hero-title .hero-line-kids {
+    margin-left: 0;
+    font-size: clamp(1.25rem, 5.2vw, 1.7rem);
+  }
+  #hero-title .hero-line-kids::after {
+    margin-top: 0.3rem;
+  }
+  .hero-custom-cta {
+    margin-top: 0.65rem;
+    margin-left: 0;
+  }
+
+  body[data-page="home"] #services > div:first-child,
+  body[data-page="home"] #home-actions > div:first-child {
+    transform: none;
+    margin-top: 0;
+    border-radius: var(--radius-card);
+  }
+
+  .home-horse-track {
+    --home-horses-visible: 1;
+  }
+  .home-horse-track .horse-card {
+    padding-inline: 0.2rem;
+  }
+  .horse-card {
+    min-height: clamp(12.2rem, 48vw, 14.2rem);
+  }
+  .horse-card-media {
+    flex-basis: min(40%, 9.5rem);
+  }
+  .horse-card .card-body {
+    gap: 0.2rem;
+  }
+  .horse-card-summary {
+    -webkit-line-clamp: 1;
+  }
+  .horse-card-cta {
+    --bs-btn-font-size: 0.78rem;
+    --bs-btn-padding-x: 0.72rem;
+    --bs-btn-padding-y: 0.38rem;
+  }
+  .horse-modal {
+    padding: 0.9rem;
+  }
+  .horse-modal-card {
+    gap: 0.9rem;
+    padding: 0.9rem;
+  }
+  #horse-modal-image {
+    aspect-ratio: 16 / 11;
+  }
+  .horse-modal-thumb {
+    width: 3.45rem;
+    height: 2.35rem;
+  }
+
   .cms-topbar {
     align-items: flex-start;
     flex-direction: column;
@@ -1628,6 +1740,9 @@ body[data-page="kontakt"] #contact.section.container {
     transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
     box-shadow: var(--shadow-lg);
   }
+  .nav-links a {
+    padding: 0.2rem 0;
+  }
 
   .nav-links li {
     width: 100%;
@@ -1667,7 +1782,7 @@ body[data-page="kontakt"] #contact.section.container {
 
   .home-horse-carousel { padding-inline: 2rem; }
   .home-horse-nav-btn { width: 2.2rem; min-width: 2.2rem; height: 2.2rem; }
-  .home-horse-track .horse-card { padding-inline: 0.55rem; }
+  .home-horse-track .horse-card { padding-inline: 0.2rem; }
   .footer-home { grid-template-columns: 1fr; }
   .horse-modal-card { grid-template-columns: 1fr; }
 
@@ -1676,6 +1791,40 @@ body[data-page="kontakt"] #contact.section.container {
   body[data-page="home"] #horses::after,
   body[data-page="home"] #gallery::before,
   body[data-page="home"] #contact::after {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero-overlay,
+  .hero {
+    min-height: 68vh;
+  }
+
+  #hero-title .hero-line {
+    font-size: clamp(1.7rem, 10vw, 2.3rem);
+  }
+  #hero-title .hero-line-pro,
+  #hero-title .hero-line-kids {
+    font-size: clamp(1.05rem, 4.8vw, 1.35rem);
+  }
+
+  .home-horse-carousel {
+    padding-inline: 1.4rem;
+  }
+  .home-horse-nav-btn {
+    width: 2rem;
+    min-width: 2rem;
+    height: 2rem;
+    font-size: 0.95rem;
+  }
+  .home-horse-nav-btn-prev { left: -0.05rem; }
+  .home-horse-nav-btn-next { right: -0.05rem; }
+
+  .horse-card .card-body {
+    padding: 0.72rem;
+  }
+  .horse-card-summary {
     display: none;
   }
 }
