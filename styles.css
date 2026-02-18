@@ -1844,18 +1844,18 @@ body[data-page="kontakt"] #contact.section.container {
   .home-action-item { grid-template-columns: 1fr; }
 
   body[data-page="home"] .service-feature {
-    width: 100%;
-    max-width: 100%;
-    margin-left: 0;
-    margin-right: 0;
+    width: calc(100% - 0.9rem);
+    max-width: calc(100% - 0.9rem);
+    margin-left: 0.45rem;
+    margin-right: 0.45rem;
     padding: 0.95rem 0.95rem 1rem;
     box-sizing: border-box;
   }
   body[data-page="home"] .service-feature-reverse {
-    width: 100%;
-    max-width: 100%;
-    margin-left: 0;
-    margin-right: 0;
+    width: calc(100% - 0.9rem);
+    max-width: calc(100% - 0.9rem);
+    margin-left: 0.45rem;
+    margin-right: 0.45rem;
     box-sizing: border-box;
   }
   body[data-page="home"] .service-feature-body h3 {
@@ -1865,6 +1865,7 @@ body[data-page="kontakt"] #contact.section.container {
     font-size: clamp(0.94rem, 3.6vw, 1.03rem);
     line-height: 1.52;
     text-wrap: pretty;
+    overflow-wrap: break-word;
   }
   body[data-page="home"] .service-feature-body .btn {
     --bs-btn-font-size: 0.86rem;
