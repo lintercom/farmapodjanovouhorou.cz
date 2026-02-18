@@ -1653,7 +1653,8 @@ body[data-page="kontakt"] #contact.section.container {
   }
 
   body[data-page="home"] #services > div:first-child {
-    width: min(95vw, 35.5rem);
+    width: 100vw;
+    max-width: 100vw;
     transform: none;
     margin-left: 0;
     margin-right: auto;
@@ -1662,7 +1663,8 @@ body[data-page="kontakt"] #contact.section.container {
     border-bottom-left-radius: 0;
   }
   body[data-page="home"] #home-actions > div:first-child {
-    width: min(95vw, 35.5rem);
+    width: 100vw;
+    max-width: 100vw;
     transform: none;
     margin-left: auto;
     margin-right: 0;
