@@ -1840,7 +1840,32 @@ body[data-page="kontakt"] #contact.section.container {
 
   .service-feature,
   .service-feature-reverse,
-  .home-action-item { grid-template-columns: 1fr; width: 100%; }
+  .home-action-item { grid-template-columns: 1fr; }
+
+  body[data-page="home"] .service-feature {
+    width: min(94vw, 34.5rem);
+    margin-left: 0;
+    margin-right: auto;
+    padding: 0.95rem 0.95rem 1rem;
+  }
+  body[data-page="home"] .service-feature-reverse {
+    width: min(94vw, 34.5rem);
+    margin-left: auto;
+    margin-right: 0;
+  }
+  body[data-page="home"] .service-feature-body h3 {
+    font-size: clamp(1.35rem, 5.7vw, 1.7rem);
+  }
+  body[data-page="home"] .service-feature-body p {
+    font-size: clamp(0.94rem, 3.6vw, 1.03rem);
+    line-height: 1.52;
+    text-wrap: pretty;
+  }
+  body[data-page="home"] .service-feature-body .btn {
+    --bs-btn-font-size: 0.86rem;
+    --bs-btn-padding-x: 0.85rem;
+    --bs-btn-padding-y: 0.45rem;
+  }
 
   .home-horse-carousel { padding-inline: 1.2rem; }
   .home-horse-viewport {
@@ -1903,5 +1928,16 @@ body[data-page="kontakt"] #contact.section.container {
   }
   .horse-card-summary {
     display: none;
+  }
+
+  body[data-page="home"] .service-feature,
+  body[data-page="home"] .service-feature-reverse {
+    width: min(95vw, 31.2rem);
+  }
+  body[data-page="home"] .service-feature-body h3 {
+    font-size: clamp(1.22rem, 6.2vw, 1.5rem);
+  }
+  body[data-page="home"] .service-feature-body p {
+    font-size: clamp(0.9rem, 4.1vw, 0.99rem);
   }
 }
