@@ -1598,6 +1598,11 @@ body[data-page="kontakt"] #contact.section.container {
    RESPONSIVE — MOBILE
    ═══════════════════════════════════════════════════ */
 @media (max-width: 920px) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   .section {
     padding-block: clamp(1.1rem, 4.5vw, 1.9rem);
   }
@@ -1644,6 +1649,11 @@ body[data-page="kontakt"] #contact.section.container {
   body[data-page="home"] #home-actions > div:first-child {
     transform: none;
     margin-top: 0;
+    border-radius: var(--radius-card);
+  }
+  body[data-page="home"] #horses > div:first-child {
+    transform: none;
+    margin: 0;
     border-radius: var(--radius-card);
   }
 
@@ -1780,7 +1790,12 @@ body[data-page="kontakt"] #contact.section.container {
   .service-feature-reverse,
   .home-action-item { grid-template-columns: 1fr; width: 100%; }
 
-  .home-horse-carousel { padding-inline: 2rem; }
+  .home-horse-carousel { padding-inline: 1.2rem; }
+  .home-horse-viewport {
+    overflow: hidden;
+    margin-block: 0;
+    padding-block: 0.4rem;
+  }
   .home-horse-nav-btn { width: 2.2rem; min-width: 2.2rem; height: 2.2rem; }
   .home-horse-track .horse-card { padding-inline: 0.2rem; }
   .footer-home { grid-template-columns: 1fr; }
@@ -1818,8 +1833,8 @@ body[data-page="kontakt"] #contact.section.container {
     height: 2rem;
     font-size: 0.95rem;
   }
-  .home-horse-nav-btn-prev { left: -0.05rem; }
-  .home-horse-nav-btn-next { right: -0.05rem; }
+  .home-horse-nav-btn-prev { left: 0.1rem; }
+  .home-horse-nav-btn-next { right: 0.1rem; }
 
   .horse-card .card-body {
     padding: 0.72rem;
