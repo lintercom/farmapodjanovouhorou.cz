@@ -126,15 +126,13 @@ a { color: inherit; text-decoration: none; }
   background: color-mix(in srgb, var(--bg), transparent 5%);
   border-bottom: 1px solid transparent;
   box-shadow: 0 1px 12px rgba(0,0,0,0.06);
-  transition: background-color 0.32s ease, border-color 0.32s ease, backdrop-filter 0.32s ease, box-shadow 0.32s ease;
+  transition: background-color 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease;
 }
 
 .site-header.is-scrolled {
   /* Fallback for browsers that do not support color-mix/backdrop-filter */
   background: rgba(248, 246, 242, 0.78);
   background: color-mix(in srgb, var(--bg), transparent 25%);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
   border-color: var(--line);
   box-shadow: 0 1px 20px rgba(0,0,0,0.08);
 }
@@ -165,8 +163,7 @@ a { color: inherit; text-decoration: none; }
   width: auto;
   object-fit: contain;
   transform-origin: center;
-  transform: translateZ(0) scale(1);
-  will-change: transform;
+  transform: scale(1);
   backface-visibility: hidden;
   image-rendering: auto;
   transition: transform 0.32s ease;
@@ -178,7 +175,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 .site-header.is-scrolled .brand img {
-  transform: translateZ(0) scale(0.64);
+  transform: scale(0.64);
 }
 
 .nav-meta {
@@ -1048,19 +1045,17 @@ body[data-page="home"] .horse-card .card-body h3 {
   --bs-btn-active-border-color: rgba(120, 184, 9, 0.5);
   --bs-btn-focus-shadow-rgb: 120, 184, 9;
   box-shadow: 0 10px 24px rgba(16, 36, 8, 0.28);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
 }
 
 .home-horse-nav-btn.media-nav-btn:hover,
 .action-photo-nav.media-nav-btn:hover {
-  transform: translateY(-50%) scale(1.04);
+  transform: translateY(-50%);
   box-shadow: 0 12px 28px rgba(16, 36, 8, 0.34);
 }
 
 .home-horse-nav-btn.media-nav-btn:active,
 .action-photo-nav.media-nav-btn:active {
-  transform: translateY(-50%) scale(0.98);
+  transform: translateY(-50%);
 }
 
 @media (max-width: 1200px) {
