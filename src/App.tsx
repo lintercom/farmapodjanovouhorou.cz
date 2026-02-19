@@ -61,7 +61,7 @@ function BodyPageSync() {
 export function App() {
   return (
     <AppDataProvider>
-      <BrowserRouter basename="/">
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <ThemeSync />
         <BodyPageSync />
         <Routes>
