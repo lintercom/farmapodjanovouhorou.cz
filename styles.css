@@ -1608,6 +1608,9 @@ body[data-page="kontakt"] #contact.section.container {
     overflow-x: visible;
   }
   body {
+    overflow-x: visible;
+  }
+  #main-content {
     overflow-x: clip;
   }
 
