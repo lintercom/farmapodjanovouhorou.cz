@@ -1,20 +1,20 @@
 # Dokumentace webu `farmapodjanovouhorou.cz`
 
-Aktualizováno: 2026-02-18  
-Projektová složka: `C:/Users/573/Desktop/FPJH`
+Aktualizováno: 2026-02-19  
+Projektová složka: `farmapodjanovouhorou`
 
 ---
 
 ## 1. Účel projektu
 
-Projekt je multipage frontend web farmy s klientským CMS (bez backendu), postavený na:
+Projekt je SPA (Single Page Application) frontend web farmy s klientským CMS (bez backendu), postavený na:
 
-- statických HTML stránkách,
-- centrálním JavaScript renderu obsahu,
+- React + React Router,
+- TypeScript,
 - kombinaci Bootstrap + Tailwind + vlastních CSS tokenů,
 - build/deploy pipeline přes Vite a GitHub Pages.
 
-Primárně řeší prezentaci služeb, koní, akcí a kontaktu. Obsah je upravitelný přes `cms.html` a ukládá se do `localStorage`.
+Primárně řeší prezentaci služeb, koní, akcí a kontaktu. Obsah je upravitelný přes `/cms` a ukládá se do `localStorage`.
 
 ---
 
@@ -22,7 +22,8 @@ Primárně řeší prezentaci služeb, koní, akcí a kontaktu. Obsah je upravit
 
 ## 2.1 Runtime
 
-- HTML5 + CSS3 + Vanilla JS (ES modules)
+- React `19` + React Router `7`
+- TypeScript
 - Bootstrap `5.3.8`
 - Tailwind CSS `4.1.18` (přes PostCSS plugin)
 - Vite `7.3.1` (build/dev/preview)
@@ -44,24 +45,21 @@ Primárně řeší prezentaci služeb, koní, akcí a kontaktu. Obsah je upravit
 
 ## 3. Struktura projektu a role souborů
 
-## 3.1 Stránky (root)
+## 3.1 Stránky (SPA)
 
-- `index.html` – domovská stránka (`data-page="home"`)
-- `sluzby.html` – přehled služeb (`data-page="sluzby"`)
-- `akce.html` – akce (`data-page="akce"`)
-- `o-nas.html` – o nás (`data-page="o-nas"`)
-- `nasi-kone.html` – naši koně (`data-page="nasi-kone"`)
-- `kontakt.html` – kontakt (`data-page="kontakt"`)
-- `cms.html` – administrační CMS rozhraní (`data-page="cms"`)
+- `index.html` – jediný vstupní HTML soubor, React mount point
+- React Router trasy: `/`, `/sluzby`, `/akce`, `/o-nas`, `/nasi-kone`, `/kontakt`, `/cms`
 
-Všechny stránky používají stejný vstupní JS modul: `./js/app.js`.
+## 3.2 Zdrojový kód (`src/`)
 
-## 3.2 JavaScript moduly (`js/`)
-
-- `app.js` – hlavní aplikační logika (render, navigace, CMS, formulářové chování, modály)
-- `storage.js` – načítání/ukládání dat do `localStorage`, import/export JSON
-- `defaultData.js` – výchozí obsah webu a struktura dat
-- `uiTokens.js` – design dictionary (tokeny + patterny class stringů)
+- `main.tsx` – vstupní bod aplikace
+- `App.tsx` – routing a layout
+- `layout/` – SiteLayout, Header, Footer
+- `pages/` – HomePage, ServicesPage, ActionsPage, HorsesPage, AboutPage, ContactPage, CmsPage
+- `components/` – Hero, ServicesSection, HorsesSection, HorseCarousel, HorseModal, ContactSection, atd.
+- `state/AppDataContext.tsx` – Context API pro data + persist do localStorage
+- `data/defaultData.ts` – výchozí obsah webu a struktura dat
+- `utils/` – storage.ts, uiTokens.ts, validators.ts, helpers.ts
 
 ## 3.3 Styling
 
@@ -101,62 +99,45 @@ Kořenová struktura:
   - `vouchers`
   - `contact`
 
-Zdroj výchozích dat: `js/defaultData.js`.
+Zdroj výchozích dat: `src/data/defaultData.ts`.
 
 ---
 
-## 5. Jak funguje aplikace (`js/app.js`)
+## 5. Jak funguje aplikace (React)
 
 ## 5.1 Inicializace
 
-`init()` provádí:
+`main.tsx` mountuje React aplikaci do `#root`. `App.tsx` obaluje routy v `AppDataProvider` a `SiteLayout`.
 
-1. navázání navigace a sticky headeru,
-2. navázání login/CMS akcí,
-3. navázání CMS live editace a repeaterů,
-4. render všech sekcí podle aktivní stránky,
-5. aplikaci UI patternů (`applyBootstrapUi()`).
+## 5.2 Komponenty a stránky
 
-## 5.2 Render vrstva
-
-Klíčové render funkce:
-
-- `renderHero`
-- `renderAbout`
-- `renderServices`
-- `renderHorses`
-- `renderHomeActions`
-- `renderActions`
-- `renderGallery`
-- `renderVouchers`
-- `renderContact`
-
-Stránky využívají `data-page` a podle něj se renderuje odpovídající obsah i varianta komponent.
+- `Hero`, `AboutSection`, `ServicesSection`, `HorsesSection`, `HomeActionsSection`
+- `ActionsSection`, `ContactSection`, `HorseCarousel`, `HorseModal`
+- Stránky: `HomePage`, `ServicesPage`, `ActionsPage`, `HorsesPage`, `AboutPage`, `ContactPage`, `CmsPage`
 
 ## 5.3 Navigace a hlavička
 
-- hamburger menu + otevření/zavření menu
-- dropdown logika přes `.nav-dropdown-toggle`
+- hamburger menu + otevření/zavření menu (mobilní)
+- dropdown logika pro Služby (desktop)
 - sticky header stav přes scroll (`.site-header.is-scrolled`)
 
 ## 5.4 CMS
 
-- přihlášení (aktuálně klientské, jednoduché credentials)
-- práce s draftem vs. persistovanými daty
+- přihlášení (klientské, admin/admin)
 - repeater editace pro služby/koně/galerii/poukazy
 - import/export JSON
 - scope filtrování sekcí podle cílové stránky
 
 ## 5.5 Modály
 
-- login modal
-- horse modal (detail koně + navigace)
+- login modal (CmsPage)
+- horse modal (detail koně + navigace fotografií)
 
 ---
 
 ## 6. Design systém
 
-## 6.1 Tokeny (`js/uiTokens.js`)
+## 6.1 Tokeny (`src/utils/uiTokens.ts`)
 
 - barvy: page bg, section bg, texty, accent green/brown
 - radius: `rounded-xl`, `rounded-2xl`, `rounded-3xl`
@@ -190,16 +171,7 @@ V `:root` jsou centrální proměnné pro:
 
 ## 7.1 Build
 
-`vite.config.js` obsahuje vstupy:
-
-- `index.html`
-- `sluzby.html`
-- `nasi-kone.html`
-- `akce.html`
-- `o-nas.html`
-- `kontakt.html`
-
-Pozn.: `cms.html` není součástí Rollup input mapy, ale je v repozitáři jako samostatná stránka.
+`vite.config.js` používá jeden vstup `index.html`. React Router zajišťuje SPA navigaci. Pro GitHub Pages se kopíruje `index.html` jako `404.html` pro SPA fallback.
 
 ## 7.2 Post-build
 
@@ -256,9 +228,9 @@ Workflow `deploy-pages.yml`:
 
 ## 10. Rychlá orientace pro vývojáře
 
-- Kde měnit obsah: `cms.html` + `js/defaultData.js`
-- Kde měnit logiku: `js/app.js`
-- Kde měnit design: `styles.css` + `js/uiTokens.js`
+- Kde měnit obsah: stránka `/cms` (CmsPage) + `src/data/defaultData.ts`
+- Kde měnit logiku: `src/` komponenty a stránky
+- Kde měnit design: `styles.css` + `src/utils/uiTokens.ts`
 - Kde měnit build: `vite.config.js`, `postcss.config.cjs`, `scripts/copy-static-assets.cjs`
 - Kde měnit deploy: `.github/workflows/deploy-pages.yml`
 

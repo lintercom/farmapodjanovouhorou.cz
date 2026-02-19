@@ -1,6 +1,73 @@
 export const STORAGE_KEY = "farmCmsDataV2";
 
-export const defaultData = {
+export interface AppData {
+  settings: {
+    siteName: string;
+    logoText: string;
+    primaryColor: string;
+    secondaryColor: string;
+    accentColor: string;
+    fontFamily: string;
+    favicon: string;
+    footerText: string;
+  };
+  sections: {
+    hero: {
+      title: string;
+      subtitle: string;
+      ctaText: string;
+      ctaTarget: string;
+      image: string;
+    };
+    about: {
+      title: string;
+      text: string;
+      image: string;
+    };
+    services: {
+      title: string;
+      items: Array<{
+        title: string;
+        description: string;
+        price: string;
+        image: string;
+      }>;
+    };
+    horses: {
+      title: string;
+      items: Array<{
+        name: string;
+        breed: string;
+        age: string;
+        description: string;
+        image: string;
+        photos?: string[];
+      }>;
+    };
+    gallery: {
+      title: string;
+      images: Array<{ src: string; alt: string }>;
+    };
+    vouchers: {
+      title: string;
+      text: string;
+      items: Array<{
+        name: string;
+        description: string;
+        price: string;
+      }>;
+    };
+    contact: {
+      title: string;
+      address: string;
+      phone: string;
+      email: string;
+      successMessage: string;
+    };
+  };
+}
+
+export const defaultData: AppData = {
   settings: {
     siteName: "Farma pod Janovu horou",
     logoText: "Farma pod Janovu horou",
@@ -135,51 +202,21 @@ export const defaultData = {
     gallery: {
       title: "Galerie",
       images: [
-        {
-          src: "migration_export/images/home/home__02__da287e964584.jpg",
-          alt: "Kůň na farmě",
-        },
-        {
-          src: "migration_export/images/home/home__05__cb2526f3b29b.jpg",
-          alt: "Jízda v přírodě",
-        },
-        {
-          src: "migration_export/images/o-nas2/o-nas2__05__58aef0f12e74.jpg",
-          alt: "Život na farmě",
-        },
-        {
-          src: "migration_export/images/sluzby/sluzby__05__f355f3ba5e60.jpg",
-          alt: "Služby pro děti a dospělé",
-        },
-        {
-          src: "migration_export/images/nasi-kone/nasi-kone__15__8ada3eb8fe1d.jpg",
-          alt: "Naši koně",
-        },
-        {
-          src: "migration_export/images/akce-na-farme/akce-na-farme__01__aec71777e69e.png",
-          alt: "Akce na farmě",
-        },
+        { src: "migration_export/images/home/home__02__da287e964584.jpg", alt: "Kůň na farmě" },
+        { src: "migration_export/images/home/home__05__cb2526f3b29b.jpg", alt: "Jízda v přírodě" },
+        { src: "migration_export/images/o-nas2/o-nas2__05__58aef0f12e74.jpg", alt: "Život na farmě" },
+        { src: "migration_export/images/sluzby/sluzby__05__f355f3ba5e60.jpg", alt: "Služby pro děti a dospělé" },
+        { src: "migration_export/images/nasi-kone/nasi-kone__15__8ada3eb8fe1d.jpg", alt: "Naši koně" },
+        { src: "migration_export/images/akce-na-farme/akce-na-farme__01__aec71777e69e.png", alt: "Akce na farmě" },
       ],
     },
     vouchers: {
       title: "Produkty",
       text: "Vedle jezdeckých aktivit nabízíme i farmářské produkty a dárkové poukazy. Pro aktuální nabídku nám napište nebo zavolejte.",
       items: [
-        {
-          name: "Vejce z farmy",
-          description: "Čerstvá domácí vejce z drobnochovu",
-          price: "dle aktuální nabídky",
-        },
-        {
-          name: "BIO hovězí a jehněčí",
-          description: "Maso z vlastního chovu, dle sezónní dostupnosti",
-          price: "dle váhy a sezóny",
-        },
-        {
-          name: "Dárkový poukaz",
-          description: "Na vyjížďky, tábory nebo individuální program",
-          price: "dle výběru",
-        },
+        { name: "Vejce z farmy", description: "Čerstvá domácí vejce z drobnochovu", price: "dle aktuální nabídky" },
+        { name: "BIO hovězí a jehněčí", description: "Maso z vlastního chovu, dle sezónní dostupnosti", price: "dle váhy a sezóny" },
+        { name: "Dárkový poukaz", description: "Na vyjížďky, tábory nebo individuální program", price: "dle výběru" },
       ],
     },
     contact: {

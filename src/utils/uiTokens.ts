@@ -33,8 +33,3 @@ export const uiPatterns = {
   FormField:
     "bg-white rounded-lg border border-neutral-200 p-3 transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4C7A5A] focus-visible:border-[#4C7A5A]",
 };
-
-export function addPatternClasses(element, className) {
-  if (!(element instanceof HTMLElement) || !className) return;
-  element.classList.add(...className.split(" ").filter(Boolean));
-}

@@ -483,11 +483,11 @@ a { color: inherit; text-decoration: none; }
 .btn-outline,
 .btn-ghost {
   --bs-btn-color: #fff;
-  --bs-btn-bg: var(--accent);
-  --bs-btn-border-color: var(--accent);
+  --bs-btn-bg: #78b809;
+  --bs-btn-border-color: #78b809;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: var(--accent-hover);
-  --bs-btn-hover-border-color: var(--accent-hover);
+  --bs-btn-hover-bg: #b86909;
+  --bs-btn-hover-border-color: #b86909;
   --bs-btn-active-color: #fff;
   --bs-btn-active-bg: #345c3e;
   --bs-btn-active-border-color: #345c3e;

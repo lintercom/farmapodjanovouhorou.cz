@@ -1,17 +1,14 @@
 const { resolve } = require("path");
 const { defineConfig } = require("vite");
+const react = require("@vitejs/plugin-react");
 
 module.exports = defineConfig({
   base: "./",
+  plugins: [react()],
   build: {
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
-        sluzby: resolve(__dirname, "sluzby.html"),
-        nasiKone: resolve(__dirname, "nasi-kone.html"),
-        akce: resolve(__dirname, "akce.html"),
-        oNas: resolve(__dirname, "o-nas.html"),
-        kontakt: resolve(__dirname, "kontakt.html"),
       },
     },
   },
