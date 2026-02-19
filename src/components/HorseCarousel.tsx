@@ -50,7 +50,7 @@ export function HorseCarousel({ horses }: HorseCarouselProps) {
     <div className={uiPatterns.FloatingPanel}>
       <div className="home-horse-carousel">
         <button
-          className="btn btn-outline home-horse-nav-btn home-horse-nav-btn-prev"
+          className="btn btn-outline media-nav-btn home-horse-nav-btn home-horse-nav-btn-prev"
           type="button"
           aria-label="Předchozí koně"
           disabled={!canSlide || clampedStart <= 0}
@@ -89,7 +89,7 @@ export function HorseCarousel({ horses }: HorseCarouselProps) {
           </div>
         </div>
         <button
-          className="btn btn-outline home-horse-nav-btn home-horse-nav-btn-next"
+          className="btn btn-outline media-nav-btn home-horse-nav-btn home-horse-nav-btn-next"
           type="button"
           aria-label="Další koně"
           disabled={!canSlide || clampedStart >= maxStart}

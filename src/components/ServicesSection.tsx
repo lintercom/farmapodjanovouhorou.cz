@@ -41,21 +41,27 @@ export function ServicesSection({ services, page }: ServicesSectionProps) {
   if (page === "sluzby") {
     const groups = [
       {
-        id: "tabory" as const,
+        id: "tabory",
         title: "Tábory",
-        summary: "Pobytové i příměstské programy pro děti se zaměřením na péči o koně.",
+        lead: "Příměstské i pobytové programy zaměřené na koně, přírodu a praktické dovednosti.",
+        description:
+          "Děti se během táborů učí bezpečnému kontaktu s koňmi, základům péče, práci ze země i jízdě. Program je vedený hravou formou a přizpůsobený věku i zkušenostem.",
         items: services.items.filter(isCamp),
       },
       {
-        id: "krouzky" as const,
+        id: "krouzky",
         title: "Kroužky",
-        summary: "Pravidelné lekce pro děti, které chtějí jezdit a starat se o koně dlouhodobě.",
+        lead: "Pravidelné lekce pro děti, které chtějí dlouhodobě jezdit a rozvíjet vztah ke koním.",
+        description:
+          "Kroužky kombinují teorii i praxi - od péče o koně přes práci na jízdárně až po vyjížďky. Důraz je na bezpečnost, systematický rozvoj a radost z pohybu.",
         items: services.items.filter(isClub),
       },
       {
-        id: "vyjizdky" as const,
+        id: "vyjizdky",
         title: "Vyjížďky",
-        summary: "Vyjížďky do přírody a individuální jízdy pro začátečníky i pokročilé.",
+        lead: "Individuální i vedené jízdy v přírodě pro začátečníky i pokročilé jezdce.",
+        description:
+          "Vyjížďky jsou vhodné pro děti i dospělé. Podle zkušeností volíme tempo i trasu tak, aby byl zážitek bezpečný, příjemný a přínosný.",
         items: services.items.filter(isRide),
       },
     ];
@@ -65,37 +71,32 @@ export function ServicesSection({ services, page }: ServicesSectionProps) {
         <header className="service-page-head">
           <h2 className="section-title">Služby</h2>
           <p className="section-lead">
-            Rychlý přehled všeho, co na farmě nabízíme. Vyber typ služby a hned uvidíš relevantní nabídku.
+            Přehled hlavních služeb. Každá karta obsahuje podrobnější popis a orientační ceny.
           </p>
         </header>
-        <nav className="service-quick-nav" aria-label="Rychlá navigace služeb">
-          {groups.map((g) => (
-            <Link key={g.id} className="service-quick-card" to={`#${g.id}`}>
-              <strong>{g.title}</strong>
-              <span>{g.items.length} položek</span>
-            </Link>
+        <div className="service-page-stack">
+          {groups.map((group, index) => (
+            <article
+              key={group.id}
+              className={`service-feature ${index % 2 === 1 ? "service-feature-reverse" : ""} ${uiPatterns.FloatingServiceCard}`}
+            >
+              <div className="service-feature-body">
+                <h3>{group.title}</h3>
+                <p className="service-feature-lead">{group.lead}</p>
+                <p>{group.description}</p>
+                <div className="service-feature-rich-list">
+                  {(group.items.length > 0 ? group.items : services.items).map((item) => (
+                    <div key={`${group.id}-${item.title}`} className="service-feature-rich-item">
+                      <h4>{item.title}</h4>
+                      <p>{item.description}</p>
+                      <strong className="service-feature-price">{item.price}</strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </article>
           ))}
-        </nav>
-        {groups.map((group) => (
-          <section key={group.id} className="service-group" id={group.id}>
-            <div className="service-group-head">
-              <h3 className="section-subtitle">{group.title}</h3>
-              <span className="service-group-count">{group.items.length} položek</span>
-            </div>
-            <p className="service-group-summary">{group.summary}</p>
-            <div className="card-grid">
-              {(group.items.length > 0 ? group.items : services.items).map((item) => (
-                <article key={item.title} className="card">
-                  <div className="card-body">
-                    <h3>{item.title}</h3>
-                    <p>{item.description}</p>
-                    <strong>{item.price}</strong>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-        ))}
+        </div>
       </section>
     );
   }

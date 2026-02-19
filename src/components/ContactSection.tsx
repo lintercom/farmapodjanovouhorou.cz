@@ -36,67 +36,72 @@ export function ContactSection({ contact }: ContactSectionProps) {
 
   return (
     <section id="contact" className="section container">
-      <h2 className="section-title">{formatSectionTitle(contact.title)}</h2>
-      <div className="split contact-split">
-        <address>
-          <p>
-            <strong>Adresa:</strong> {contact.address}
-          </p>
-          <p>
-            <strong>Telefon:</strong>{" "}
-            <a href={`tel:${contact.phone}`}>{contact.phone}</a>
-          </p>
-          <p>
-            <strong>Email:</strong>{" "}
-            <a href={`mailto:${contact.email}`}>{contact.email}</a>
-          </p>
-          <a className="link-inline" href="https://mapy.cz" target="_blank" rel="noreferrer">
-            zobrazit na mapě <span aria-hidden="true">→</span>
-          </a>
-        </address>
-        <form
-          id="contact-form"
-          className={`contact-form vstack gap-2 ${uiPatterns.FloatingPanel}`}
-          noValidate
-          aria-describedby="contact-success"
-          onSubmit={handleSubmit}
-        >
-          <label htmlFor="contact-name">Jméno</label>
-          <input
-            id="contact-name"
-            className={`form-control ${uiPatterns.FormField}`}
-            type="text"
-            name="name"
-            required
-          />
-          <label htmlFor="contact-email">Email</label>
-          <input
-            id="contact-email"
-            className={`form-control ${uiPatterns.FormField}`}
-            type="email"
-            name="email"
-            required
-            aria-invalid={emailInvalid}
-          />
-          <label htmlFor="contact-message">Zpráva</label>
-          <textarea
-            id="contact-message"
-            className={`form-control ${uiPatterns.FormField}`}
-            name="message"
-            rows={4}
-            required
-          />
-          <button className="btn btn-primary" type="submit">
-            Odeslat
-          </button>
-          <p
-            className={`success-msg ${isError ? "is-error" : ""}`}
-            id="contact-success"
-            aria-live="polite"
+      <div className={uiPatterns.FloatingPanel}>
+        <h2 className="section-title">{formatSectionTitle(contact.title)}</h2>
+        <p className="section-lead">
+          Napiš nám nebo zavolej. Rádi doporučíme vhodnou aktivitu pro děti i dospělé.
+        </p>
+        <div className="split contact-split">
+          <address className="text-card contact-info-card">
+            <p>
+              <strong>Adresa:</strong> {contact.address}
+            </p>
+            <p>
+              <strong>Telefon:</strong>{" "}
+              <a href={`tel:${contact.phone}`}>{contact.phone}</a>
+            </p>
+            <p>
+              <strong>Email:</strong>{" "}
+              <a href={`mailto:${contact.email}`}>{contact.email}</a>
+            </p>
+            <a className="link-inline" href="https://mapy.cz" target="_blank" rel="noreferrer">
+              zobrazit na mapě <span aria-hidden="true">→</span>
+            </a>
+          </address>
+          <form
+            id="contact-form"
+            className={`contact-form vstack gap-2 ${uiPatterns.MinimalContentCard}`}
+            noValidate
+            aria-describedby="contact-success"
+            onSubmit={handleSubmit}
           >
-            {successMsg}
-          </p>
-        </form>
+            <label htmlFor="contact-name">Jméno</label>
+            <input
+              id="contact-name"
+              className={`form-control ${uiPatterns.FormField}`}
+              type="text"
+              name="name"
+              required
+            />
+            <label htmlFor="contact-email">Email</label>
+            <input
+              id="contact-email"
+              className={`form-control ${uiPatterns.FormField}`}
+              type="email"
+              name="email"
+              required
+              aria-invalid={emailInvalid}
+            />
+            <label htmlFor="contact-message">Zpráva</label>
+            <textarea
+              id="contact-message"
+              className={`form-control ${uiPatterns.FormField}`}
+              name="message"
+              rows={4}
+              required
+            />
+            <button className="btn btn-primary" type="submit">
+              Odeslat
+            </button>
+            <p
+              className={`success-msg ${isError ? "is-error" : ""}`}
+              id="contact-success"
+              aria-live="polite"
+            >
+              {successMsg}
+            </p>
+          </form>
+        </div>
       </div>
     </section>
   );

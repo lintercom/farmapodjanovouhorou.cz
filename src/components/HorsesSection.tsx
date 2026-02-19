@@ -47,49 +47,51 @@ export function HorsesSection({ horses, page }: HorsesSectionProps) {
     return (
       <>
         <section id="horses" className="section container">
-          <h2 className="section-title">{formatSectionTitle(horses.title || "Naši koně")}</h2>
-          <p className="section-lead">
-            Klikni na koně, otevře se detail s informacemi a galerií fotek.
-          </p>
-          <div className="card-grid">
-            {horses.items.map((horse, index) => {
-              const imageSrc = getHorseImageSource(horse);
-              return (
-                <article
-                  key={horse.name}
-                  className={`card horse-card ${uiPatterns.FloatingServiceCard} horse-card-clickable`}
-                  onClick={() => {
-                    setModalIndex(index);
-                    setPhotoIndex(0);
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
+          <div className={uiPatterns.FloatingPanel}>
+            <h2 className="section-title">{formatSectionTitle(horses.title || "Naši koně")}</h2>
+            <p className="section-lead">
+              Klikni na koně, otevře se detail s informacemi a galerií fotek.
+            </p>
+            <div className="card-grid">
+              {horses.items.map((horse, index) => {
+                const imageSrc = getHorseImageSource(horse);
+                return (
+                  <article
+                    key={horse.name}
+                    className={`card horse-card ${uiPatterns.FloatingServiceCard} horse-card-clickable`}
+                    onClick={() => {
                       setModalIndex(index);
                       setPhotoIndex(0);
-                    }
-                  }}
-                >
-                  {imageSrc && (
-                    <div className="horse-card-media">
-                      <img src={imageSrc} alt={horse.name || "Kůň na farmě"} loading="lazy" />
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setModalIndex(index);
+                        setPhotoIndex(0);
+                      }
+                    }}
+                  >
+                    {imageSrc && (
+                      <div className="horse-card-media">
+                        <img src={imageSrc} alt={horse.name || "Kůň na farmě"} loading="lazy" />
+                      </div>
+                    )}
+                    <div className="card-body">
+                      <h3>{horse.name}</h3>
+                      <p>
+                        <strong>Plemeno:</strong> {horse.breed} | <strong>Věk:</strong> {horse.age}
+                      </p>
+                      <p>{horse.description}</p>
+                      <button className="btn btn-outline horse-open-btn" type="button">
+                        Detail koně
+                      </button>
                     </div>
-                  )}
-                  <div className="card-body">
-                    <h3>{horse.name}</h3>
-                    <p>
-                      <strong>Plemeno:</strong> {horse.breed} | <strong>Věk:</strong> {horse.age}
-                    </p>
-                    <p>{horse.description}</p>
-                    <button className="btn btn-outline horse-open-btn" type="button">
-                      Detail koně
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
+                  </article>
+                );
+              })}
+            </div>
           </div>
         </section>
         {currentHorse && (
