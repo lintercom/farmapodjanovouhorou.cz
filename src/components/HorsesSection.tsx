@@ -6,12 +6,6 @@ import { HorseModal } from "./HorseModal";
 import { HorseCarousel } from "./HorseCarousel";
 import type { AppData } from "../data/defaultData";
 
-function formatSectionTitle(title: string | undefined): string {
-  const n = String(title ?? "").trim().replace(/[.]$/, "");
-  if (!n) return "";
-  return n.charAt(0).toUpperCase() + n.slice(1);
-}
-
 interface HorsesSectionProps {
   horses: AppData["sections"]["horses"];
   page: string;
@@ -47,51 +41,45 @@ export function HorsesSection({ horses, page }: HorsesSectionProps) {
     return (
       <>
         <section id="horses" className="section container">
-          <div className={uiPatterns.FloatingPanel}>
-            <h2 className="section-title">{formatSectionTitle(horses.title || "Naši koně")}</h2>
-            <p className="section-lead">
-              Klikni na koně, otevře se detail s informacemi a galerií fotek.
-            </p>
-            <div className="card-grid">
-              {horses.items.map((horse, index) => {
-                const imageSrc = getHorseImageSource(horse);
-                return (
-                  <article
-                    key={horse.name}
-                    className={`card horse-card ${uiPatterns.FloatingServiceCard} horse-card-clickable`}
-                    onClick={() => {
+          <div className="card-grid cards-bg-title" data-bg-title="Koně">
+            {horses.items.map((horse, index) => {
+              const imageSrc = getHorseImageSource(horse);
+              return (
+                <article
+                  key={horse.name}
+                  className={`card horse-card ${uiPatterns.FloatingServiceCard} horse-card-clickable`}
+                  onClick={() => {
+                    setModalIndex(index);
+                    setPhotoIndex(0);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
                       setModalIndex(index);
                       setPhotoIndex(0);
-                    }}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setModalIndex(index);
-                        setPhotoIndex(0);
-                      }
-                    }}
-                  >
-                    {imageSrc && (
-                      <div className="horse-card-media">
-                        <img src={imageSrc} alt={horse.name || "Kůň na farmě"} loading="lazy" />
-                      </div>
-                    )}
-                    <div className="card-body">
-                      <h3>{horse.name}</h3>
-                      <p>
-                        <strong>Plemeno:</strong> {horse.breed} | <strong>Věk:</strong> {horse.age}
-                      </p>
-                      <p>{horse.description}</p>
-                      <button className="btn btn-outline horse-open-btn" type="button">
-                        Detail koně
-                      </button>
+                    }
+                  }}
+                >
+                  {imageSrc && (
+                    <div className="horse-card-media">
+                      <img src={imageSrc} alt={horse.name || "Kůň na farmě"} loading="lazy" />
                     </div>
-                  </article>
-                );
-              })}
-            </div>
+                  )}
+                  <div className="card-body">
+                    <h3>{horse.name}</h3>
+                    <p>
+                      <strong>Plemeno:</strong> {horse.breed} | <strong>Věk:</strong> {horse.age}
+                    </p>
+                    <p>{horse.description}</p>
+                    <button className="btn btn-outline horse-open-btn" type="button">
+                      Detail koně
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </section>
         {currentHorse && (

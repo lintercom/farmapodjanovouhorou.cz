@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { uiPatterns } from "../utils/uiTokens";
-import { formatSectionTitle } from "../utils/helpers";
 import { isValidEmail } from "../utils/validators";
 import type { AppData } from "../data/defaultData";
 
@@ -36,13 +35,8 @@ export function ContactSection({ contact }: ContactSectionProps) {
 
   return (
     <section id="contact" className="section container">
-      <div className={uiPatterns.FloatingPanel}>
-        <h2 className="section-title">{formatSectionTitle(contact.title)}</h2>
-        <p className="section-lead">
-          Napiš nám nebo zavolej. Rádi doporučíme vhodnou aktivitu pro děti i dospělé.
-        </p>
-        <div className="split contact-split">
-          <address className="text-card contact-info-card">
+      <div className="split contact-split cards-bg-title" data-bg-title="Kontakt">
+        <address className="text-card contact-info-card">
             <p>
               <strong>Adresa:</strong> {contact.address}
             </p>
@@ -101,7 +95,6 @@ export function ContactSection({ contact }: ContactSectionProps) {
               {successMsg}
             </p>
           </form>
-        </div>
       </div>
     </section>
   );

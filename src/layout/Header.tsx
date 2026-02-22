@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAppData } from "../state/AppDataContext";
 
 const DEFAULT_LOGO = "migration_export/images/krouzky/krouzky__02__40942955f2cf.png";
 
 export function Header() {
   const { data } = useAppData();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -18,11 +19,19 @@ export function Header() {
   }, []);
 
   const logoSrc = data.settings.favicon?.trim() || DEFAULT_LOGO;
+  const currentPath = (location.pathname.replace(/\/+$/, "") || "/");
+
+  const handleTopNavClick = (targetPath: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const normalizedTargetPath = targetPath.replace(/\/+$/, "") || "/";
+    if (currentPath !== normalizedTargetPath) return;
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <header className={`site-header ${scrolled ? "is-scrolled" : ""}`} id="top">
       <nav className="nav container" aria-label="Hlavní navigace">
-        <Link to="/" className="brand" id="brand-link" aria-label="Domů">
+        <Link to="/" className="brand" id="brand-link" aria-label="Domů" onClick={handleTopNavClick("/")}>
           <img id="brand-logo" src={logoSrc} alt="Logo farmy" />
         </Link>
         <button
@@ -45,11 +54,11 @@ export function Header() {
           onClick={() => setMenuOpen(false)}
         >
           <li>
-            <Link to="/">Domů</Link>
+            <Link to="/" onClick={handleTopNavClick("/")}>Domů</Link>
           </li>
           <li className={`nav-dropdown ${dropdownOpen ? "open" : ""}`}>
             <div className="nav-dropdown-head">
-              <Link className="nav-main-link" to="/sluzby">
+              <Link className="nav-main-link" to="/sluzby" onClick={handleTopNavClick("/sluzby")}>
                 Služby
               </Link>
               <button
@@ -79,16 +88,16 @@ export function Header() {
             </ul>
           </li>
           <li>
-            <Link to="/akce">Akce</Link>
+            <Link to="/akce" onClick={handleTopNavClick("/akce")}>Akce</Link>
           </li>
           <li>
-            <Link to="/nasi-kone">Naši koně</Link>
+            <Link to="/nasi-kone" onClick={handleTopNavClick("/nasi-kone")}>Naši koně</Link>
           </li>
           <li>
-            <Link to="/o-nas">O nás</Link>
+            <Link to="/o-nas" onClick={handleTopNavClick("/o-nas")}>O nás</Link>
           </li>
           <li>
-            <Link to="/kontakt">Kontakt</Link>
+            <Link to="/kontakt" onClick={handleTopNavClick("/kontakt")}>Kontakt</Link>
           </li>
         </ul>
       </nav>

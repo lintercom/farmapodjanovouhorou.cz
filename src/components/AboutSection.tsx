@@ -1,6 +1,5 @@
 import React from "react";
 import { uiPatterns } from "../utils/uiTokens";
-import { formatSectionTitle } from "../utils/helpers";
 import type { AppData } from "../data/defaultData";
 
 interface AboutSectionProps {
@@ -10,10 +9,13 @@ interface AboutSectionProps {
 export function AboutSection({ about }: AboutSectionProps) {
   return (
     <section id="about" className="section container">
-      <article className={`text-card ${uiPatterns.FloatingPanel}`}>
-        <h2 className="section-title">{formatSectionTitle(about.title)}</h2>
-        <p className="section-lead">{about.text}</p>
-      </article>
+      <div className="card-grid cards-bg-title" data-bg-title="O nás">
+        <article className={`card about-copy-card ${uiPatterns.FloatingServiceCard}`}>
+          <div className="card-body">
+            <p>{about.text}</p>
+          </div>
+        </article>
+      </div>
     </section>
   );
 }

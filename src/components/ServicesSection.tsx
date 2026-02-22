@@ -68,13 +68,7 @@ export function ServicesSection({ services, page }: ServicesSectionProps) {
 
     return (
       <section id="services" className="section container">
-        <header className="service-page-head">
-          <h2 className="section-title">Služby</h2>
-          <p className="section-lead">
-            Přehled hlavních služeb. Každá karta obsahuje podrobnější popis a orientační ceny.
-          </p>
-        </header>
-        <div className="service-page-stack">
+        <div className="service-page-stack cards-bg-title" data-bg-title="Služby">
           {groups.map((group, index) => (
             <article
               key={group.id}
@@ -112,7 +106,7 @@ export function ServicesSection({ services, page }: ServicesSectionProps) {
     return (
       <section id="services" className="section container">
         <div className={uiPatterns.FloatingPanel}>
-          <div className="home-service-stack">
+          <div className="home-service-stack cards-bg-title" data-bg-title="Služby">
             {groups.map((group, index) => (
               <article
                 key={group.id}
@@ -135,8 +129,7 @@ export function ServicesSection({ services, page }: ServicesSectionProps) {
 
   return (
     <section id="services" className="section container">
-      <h2 className="section-title">{services.title}</h2>
-      <div className="card-grid">
+      <div className="card-grid cards-bg-title" data-bg-title="Služby">
         {services.items.map((item) => (
           <article key={item.title} className={`card ${uiPatterns.FloatingServiceCard}`}>
             <div className="card-body">

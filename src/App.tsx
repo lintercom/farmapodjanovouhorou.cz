@@ -55,6 +55,19 @@ function BodyPageSync() {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (!location.hash) {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      return;
+    }
+
+    const id = location.hash.replace(/^#/, "");
+    const target = document.getElementById(id);
+    if (target) {
+      target.scrollIntoView({ block: "start" });
+    }
+  }, [location.pathname, location.hash]);
+
   return null;
 }
 

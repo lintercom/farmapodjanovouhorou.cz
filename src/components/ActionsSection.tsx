@@ -98,29 +98,23 @@ export function ActionsSection({ gallery }: ActionsSectionProps) {
 
   return (
     <section id="actions" className="section container">
-      <div className={uiPatterns.FloatingPanel}>
-        <h2 className="section-title">Akce</h2>
-        <p className="section-lead">
-          Novinky a příběhy z farmy. Otevři článek a zobrazí se detail s galerií fotografií.
-        </p>
-        <div className="actions-blog-list">
-          {posts.map((post, index) => (
-            <article key={post.id} className={`action-post-card ${uiPatterns.FloatingServiceCard}`}>
-              {post.photos[0] && (
-                <div className="action-post-media">
-                  <img src={post.photos[0].src} alt={post.photos[0].alt || post.title} loading="lazy" />
-                </div>
-              )}
-              <div className="action-post-body">
-                <h3>{post.title}</h3>
-                <p>{post.summary}</p>
-                <button className="btn btn-outline" type="button" onClick={() => openPost(index)}>
-                  Číst článek
-                </button>
+      <div className="actions-blog-list cards-bg-title" data-bg-title="Akce">
+        {posts.map((post, index) => (
+          <article key={post.id} className={`action-post-card ${uiPatterns.FloatingServiceCard}`}>
+            {post.photos[0] && (
+              <div className="action-post-media">
+                <img src={post.photos[0].src} alt={post.photos[0].alt || post.title} loading="lazy" />
               </div>
-            </article>
-          ))}
-        </div>
+            )}
+            <div className="action-post-body">
+              <h3>{post.title}</h3>
+              <p>{post.summary}</p>
+              <button className="btn btn-outline action-card-cta" type="button" onClick={() => openPost(index)}>
+                Více
+              </button>
+            </div>
+          </article>
+        ))}
       </div>
 
       {activePost && (

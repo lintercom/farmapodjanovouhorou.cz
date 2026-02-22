@@ -122,17 +122,19 @@ a { color: inherit; text-decoration: none; }
   top: 0;
   z-index: 100;
   /* Fallback for browsers that do not support color-mix */
-  background: rgba(248, 246, 242, 0.95);
-  background: color-mix(in srgb, var(--bg), transparent 5%);
+  background: rgba(255, 255, 255, 0.95);
+  background: color-mix(in srgb, var(--bg-card), transparent 5%);
   border-bottom: 1px solid transparent;
   box-shadow: 0 1px 12px rgba(0,0,0,0.06);
-  transition: background-color 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease;
+  transition: background-color 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease, backdrop-filter 0.32s ease;
 }
 
 .site-header.is-scrolled {
   /* Fallback for browsers that do not support color-mix/backdrop-filter */
-  background: rgba(248, 246, 242, 0.78);
-  background: color-mix(in srgb, var(--bg), transparent 25%);
+  background: rgba(248, 246, 242, 0.92);
+  background: color-mix(in srgb, var(--bg), transparent 10%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  backdrop-filter: blur(10px) saturate(120%);
   border-color: var(--line);
   box-shadow: 0 1px 20px rgba(0,0,0,0.08);
 }
@@ -625,6 +627,47 @@ a { color: inherit; text-decoration: none; }
   gap: clamp(1rem, 2.2vw, 1.5rem);
 }
 
+.card-grid {
+  align-items: stretch;
+}
+
+.card-grid > .card {
+  height: 100%;
+}
+
+.card-grid > .card:not(.horse-card) {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-grid > .card:not(.horse-card) .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.card-grid > .card:not(.horse-card) .card-body p {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(1.6em * 3);
+}
+
+.card-grid > .about-copy-card .card-body p {
+  display: block;
+  overflow: visible;
+  min-height: 0;
+}
+
+.card-grid > .card:not(.horse-card) .card-body .btn,
+.card-grid > .card:not(.horse-card) .card-body .link-inline {
+  margin-top: auto;
+  width: fit-content;
+}
+
 .action-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
@@ -634,6 +677,37 @@ a { color: inherit; text-decoration: none; }
 .actions-blog-list {
   display: grid;
   gap: clamp(1rem, 2.2vw, 1.4rem);
+}
+
+/* Decorative section label behind card groups */
+.cards-bg-title {
+  --cards-bg-title-size: clamp(2rem, 6vw, 4.4rem);
+  --cards-bg-title-gap: clamp(0.45rem, 1vw, 0.85rem);
+  position: relative;
+  isolation: isolate;
+  padding-top: calc((var(--cards-bg-title-size) * 1.25) + var(--cards-bg-title-gap));
+}
+
+.cards-bg-title::before {
+  content: attr(data-bg-title);
+  position: absolute;
+  left: clamp(0.4rem, 1vw, 0.9rem);
+  top: clamp(0rem, 0.2vw, 0.2rem);
+  font-size: var(--cards-bg-title-size);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 0.9;
+  color: #efe9c8;
+  text-shadow: none;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.cards-bg-title > * {
+  position: relative;
+  z-index: 1;
 }
 
 .action-post-card {
@@ -656,8 +730,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 .action-post-body {
-  display: grid;
-  align-content: center;
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   padding: clamp(0.95rem, 2vw, 1.3rem);
 }
@@ -669,6 +743,11 @@ a { color: inherit; text-decoration: none; }
 .action-post-body p {
   margin: 0;
   color: var(--text-2);
+}
+
+.action-post-body .action-card-cta {
+  margin-top: auto;
+  width: fit-content;
 }
 
 #services.container {
@@ -753,9 +832,18 @@ a { color: inherit; text-decoration: none; }
   align-content: center;
   gap: 0.6rem;
 }
-.service-feature-body h3 { margin: 0; font-weight: 600; }
+.service-feature-body h3 {
+  margin: 0;
+  font-family: "Poppins", "Inter", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-rendering: optimizeLegibility;
+}
 .service-feature-body p { margin: 0; color: var(--text-2); line-height: 1.6; }
-.service-feature-body .btn { width: fit-content; }
+.service-feature-body .btn {
+  width: fit-content;
+  margin-top: auto;
+}
 
 .service-group + .service-group { margin-top: 1.5rem; }
 .service-page-head { margin-bottom: 1rem; }
@@ -860,7 +948,7 @@ body[data-page="sluzby"] .service-feature-body p {
    HORSES
    ═══════════════════════════════════════════════════ */
 .horse-card-clickable { cursor: pointer; }
-.horse-open-btn { margin-top: 0.65rem; }
+.horse-open-btn { margin-top: auto; }
 
 .horse-card {
   display: flex;
@@ -872,8 +960,8 @@ body[data-page="sluzby"] .service-feature-body p {
 }
 
 .horse-card .card-body {
-  display: grid;
-  align-content: center;
+  display: flex;
+  flex-direction: column;
   gap: 0.35rem;
   flex: 1 1 auto;
 }
@@ -948,12 +1036,20 @@ body[data-page="home"] .horse-card .card-body h3 {
 }
 
 .horse-card-cta {
-  margin-top: 0.45rem;
+  margin-top: auto;
   justify-self: start;
   --bs-btn-font-size: 0.8rem;
   --bs-btn-padding-x: 0.8rem;
   --bs-btn-padding-y: 0.4rem;
   border-radius: var(--radius-full);
+}
+
+body[data-page="nasi-kone"] .horse-card .card-body > p:last-of-type {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(1.45em * 3);
 }
 
 .home-horse-carousel {
@@ -1069,16 +1165,20 @@ body[data-page="home"] .horse-card .card-body h3 {
    ═══════════════════════════════════════════════════ */
 .home-actions-list {
   display: grid;
-  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16.5rem), 1fr));
+  gap: 1rem;
+  align-items: stretch;
 }
 
 .home-action-item {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
   background: var(--bg-card);
   box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  height: 100%;
   transition: transform 0.28s ease, box-shadow 0.28s ease;
 }
 .home-action-item:hover {
@@ -1086,12 +1186,50 @@ body[data-page="home"] .horse-card .card-body h3 {
   box-shadow: var(--shadow-hover);
 }
 
+.home-action-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+
+.home-action-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.home-action-item:hover .home-action-media img {
+  transform: scale(1.04);
+}
+
 .home-action-body {
   padding: clamp(1rem, 2vw, 1.3rem);
   display: grid;
-  gap: 0.35rem;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0.45rem;
+  flex: 1;
 }
-.home-action-body h3 { margin: 0; font-size: 1.05rem; font-weight: 600; }
+
+.home-action-meta {
+  margin: 0;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.home-action-meta span {
+  color: var(--accent);
+}
+
+.home-action-body h3 {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 650;
+}
 .home-action-body p {
   margin: 0;
   color: var(--text-2);
@@ -1099,6 +1237,23 @@ body[data-page="home"] .horse-card .card-body h3 {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  min-height: calc(1.65em * 3);
+}
+
+.home-action-cta {
+  margin-top: auto;
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.home-action-cta span {
+  transition: transform 0.22s ease;
+}
+
+.home-action-cta:hover span {
+  transform: translateX(2px);
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1179,7 +1334,7 @@ address p { margin: 0 0 0.5rem; }
    FOOTER — Floating card style
    ═══════════════════════════════════════════════════ */
 .site-footer {
-  background: var(--bg-warm);
+  background: #78b809;
   border-top: 1px solid var(--line);
   padding-block: var(--space-section);
 }
@@ -1749,12 +1904,22 @@ summary {
 }
 
 /* Homepage sections visual tweaks */
+body[data-page="home"] {
+  background: var(--bg-card);
+}
+
 body[data-page="home"] #about,
 body[data-page="home"] #services,
 body[data-page="home"] #horses,
 body[data-page="home"] #gallery,
 body[data-page="home"] #contact {
   position: relative;
+}
+
+body[data-page="home"] #services > div:first-child,
+body[data-page="home"] #home-actions > div:first-child,
+body[data-page="home"] #horses > div:first-child {
+  background-color: var(--bg) !important;
 }
 
 body[data-page="home"] .section.container {
@@ -2001,7 +2166,7 @@ body[data-page="kontakt"] #contact.section.container {
     display: block;
     order: 3;
     position: absolute;
-    right: max(0.45rem, env(safe-area-inset-right));
+    right: max(0.7rem, env(safe-area-inset-right));
     top: 50%;
     transform: translateY(-50%);
     margin: 0;
@@ -2167,6 +2332,15 @@ body[data-page="kontakt"] #contact.section.container {
 }
 
 @media (max-width: 560px) {
+  .cards-bg-title {
+    --cards-bg-title-size: clamp(1.35rem, 9vw, 2rem);
+    --cards-bg-title-gap: clamp(0.4rem, 1.8vw, 0.7rem);
+  }
+
+  .cards-bg-title::before {
+    letter-spacing: 0.05em;
+  }
+
   .hero-overlay,
   .hero {
     min-height: 68vh;
@@ -2191,7 +2365,7 @@ body[data-page="kontakt"] #contact.section.container {
     padding-right: 2.7rem;
   }
   .hamburger {
-    right: max(0.35rem, env(safe-area-inset-right));
+    right: max(0.6rem, env(safe-area-inset-right));
   }
   .home-horse-nav-btn {
     width: 2rem;
