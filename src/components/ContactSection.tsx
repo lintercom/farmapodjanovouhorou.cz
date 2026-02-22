@@ -7,6 +7,10 @@ interface ContactSectionProps {
   contact: AppData["sections"]["contact"];
 }
 
+const CONTACT_MAP_URL = "https://maps.google.com/?q=Janova%20Hora%20466%2C%20763%2012%20Vizovice";
+const CONTACT_MAP_EMBED_URL =
+  "https://maps.google.com/maps?q=Janova%20Hora%20466%2C%20763%2012%20Vizovice&t=&z=13&ie=UTF8&iwloc=&output=embed";
+
 export function ContactSection({ contact }: ContactSectionProps) {
   const [successMsg, setSuccessMsg] = useState("");
   const [isError, setIsError] = useState(false);
@@ -36,22 +40,38 @@ export function ContactSection({ contact }: ContactSectionProps) {
   return (
     <section id="contact" className="section container">
       <div className="split contact-split cards-bg-title" data-bg-title="Kontakt">
-        <address className="text-card contact-info-card">
-            <p>
-              <strong>Adresa:</strong> {contact.address}
-            </p>
-            <p>
-              <strong>Telefon:</strong>{" "}
-              <a href={`tel:${contact.phone}`}>{contact.phone}</a>
-            </p>
-            <p>
-              <strong>Email:</strong>{" "}
-              <a href={`mailto:${contact.email}`}>{contact.email}</a>
-            </p>
-            <a className="link-inline" href="https://mapy.cz" target="_blank" rel="noreferrer">
-              zobrazit na mapě <span aria-hidden="true">→</span>
+        <div className="contact-left-stack">
+          <address className="text-card contact-info-card">
+              <p>
+                <strong>Adresa:</strong> {contact.address}
+              </p>
+              <p>
+                <strong>Telefon:</strong>{" "}
+                <a href={`tel:${contact.phone}`}>{contact.phone}</a>
+              </p>
+              <p>
+                <strong>Email:</strong>{" "}
+                <a href={`mailto:${contact.email}`}>{contact.email}</a>
+              </p>
+            </address>
+            <a
+              className="contact-map-card"
+              href={CONTACT_MAP_URL}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Zobrazit farmu na mapě"
+            >
+              <iframe
+                title="Mapa farmy"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                src={CONTACT_MAP_EMBED_URL}
+              />
+              <span className="contact-map-card-label">
+                zobrazit na mapě <span aria-hidden="true">→</span>
+              </span>
             </a>
-          </address>
+          </div>
           <form
             id="contact-form"
             className={`contact-form vstack gap-2 ${uiPatterns.MinimalContentCard}`}

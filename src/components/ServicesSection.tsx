@@ -69,27 +69,36 @@ export function ServicesSection({ services, page }: ServicesSectionProps) {
     return (
       <section id="services" className="section container">
         <div className="service-page-stack cards-bg-title" data-bg-title="Služby">
-          {groups.map((group, index) => (
-            <article
-              key={group.id}
-              className={`service-feature ${index % 2 === 1 ? "service-feature-reverse" : ""} ${uiPatterns.FloatingServiceCard}`}
-            >
-              <div className="service-feature-body">
-                <h3>{group.title}</h3>
-                <p className="service-feature-lead">{group.lead}</p>
-                <p>{group.description}</p>
-                <div className="service-feature-rich-list">
-                  {(group.items.length > 0 ? group.items : services.items).map((item) => (
-                    <div key={`${group.id}-${item.title}`} className="service-feature-rich-item">
-                      <h4>{item.title}</h4>
-                      <p>{item.description}</p>
-                      <strong className="service-feature-price">{item.price}</strong>
+          {groups.map((group, index) => {
+            const groupItems = group.items.length > 0 ? group.items : services.items;
+
+            return (
+              <article
+                key={group.id}
+                className={`service-feature ${index % 2 === 1 ? "service-feature-reverse" : ""} ${uiPatterns.FloatingServiceCard}`}
+              >
+                <div className="service-feature-body">
+                  <div className="service-feature-head">
+                    <div className="service-feature-title-row">
+                      <h3>{group.title}</h3>
+                      <span className="service-feature-badge">{groupItems.length} položek</span>
                     </div>
-                  ))}
+                    <p className="service-feature-lead">{group.lead}</p>
+                    <p className="service-feature-copy">{group.description}</p>
+                  </div>
+                  <div className="service-feature-rich-list">
+                    {groupItems.map((item) => (
+                      <div key={`${group.id}-${item.title}`} className="service-feature-rich-item">
+                        <h4>{item.title}</h4>
+                        <p>{item.description}</p>
+                        <strong className="service-feature-price">{item.price}</strong>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </section>
     );
