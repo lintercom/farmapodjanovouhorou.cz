@@ -98,9 +98,9 @@ export function ActionsSection({ gallery }: ActionsSectionProps) {
 
   return (
     <section id="actions" className="section container">
-      <div className="actions-blog-list cards-bg-title" data-bg-title="Akce">
+      <div className={`actions-blog-list cards-bg-title ${uiPatterns.FloatingPanel}`} data-bg-title="Akce">
         {posts.map((post, index) => (
-          <article key={post.id} className={`action-post-card ${uiPatterns.FloatingServiceCard}`}>
+          <article key={post.id} className={`action-post-card hs-card ${uiPatterns.FloatingServiceCard}`}>
             {post.photos[0] && (
               <div className="action-post-media">
                 <img src={post.photos[0].src} alt={post.photos[0].alt || post.title} loading="lazy" />
@@ -118,7 +118,7 @@ export function ActionsSection({ gallery }: ActionsSectionProps) {
       </div>
 
       {activePost && (
-        <div className="action-modal open" role="dialog" aria-modal="true" aria-labelledby="action-modal-title">
+        <div className="action-modal open hs-overlay" role="dialog" aria-modal="true" aria-labelledby="action-modal-title">
           <div className="action-modal-card">
             <button
               className="close-btn action-modal-close"

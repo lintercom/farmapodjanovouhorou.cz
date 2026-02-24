@@ -27,7 +27,7 @@ export function HorseModal({ horse, photoIndex, onPhotoChange, onPrev, onNext, o
 
   return (
     <div
-      className="horse-modal open"
+      className="horse-modal open hs-overlay"
       id="horse-modal"
       role="dialog"
       aria-modal="true"

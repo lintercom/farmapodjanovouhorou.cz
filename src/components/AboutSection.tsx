@@ -9,8 +9,8 @@ interface AboutSectionProps {
 export function AboutSection({ about }: AboutSectionProps) {
   return (
     <section id="about" className="section container">
-      <div className="card-grid cards-bg-title" data-bg-title="O nás">
-        <article className={`card about-copy-card ${uiPatterns.FloatingServiceCard}`}>
+      <div className={`cards-bg-title ${uiPatterns.FloatingPanel}`} data-bg-title="O nás">
+        <article className={`card about-copy-card hs-card ${uiPatterns.FloatingServiceCard}`}>
           <div className="card-body">
             <p>{about.text}</p>
           </div>

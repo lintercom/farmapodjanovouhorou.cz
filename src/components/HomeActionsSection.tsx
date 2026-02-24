@@ -15,7 +15,7 @@ export function HomeActionsSection({ gallery }: HomeActionsSectionProps) {
       <div className={uiPatterns.FloatingPanel}>
         <div className="home-actions-list cards-bg-title" data-bg-title="Akce">
           {latest.map((item, index) => (
-            <article key={item.src} className={`home-action-item ${uiPatterns.FloatingServiceCard}`}>
+            <article key={item.src} className={`home-action-item hs-card ${uiPatterns.FloatingServiceCard}`}>
               <div className="home-action-media">
                 <img src={item.src} alt={item.alt || `Akce #${latest.length - index}`} loading="lazy" />
               </div>

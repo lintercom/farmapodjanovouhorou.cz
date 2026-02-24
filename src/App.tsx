@@ -71,11 +71,23 @@ function BodyPageSync() {
   return null;
 }
 
+function PrelineInit() {
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      (window as Window & { HSStaticMethods?: { autoInit: () => void } }).HSStaticMethods?.autoInit();
+    }, 0);
+    return () => window.clearTimeout(timer);
+  });
+
+  return null;
+}
+
 export function App() {
   return (
     <AppDataProvider>
       <BrowserRouter basename={import.meta.env.BASE_URL}>
         <ThemeSync />
+        <PrelineInit />
         <BodyPageSync />
         <Routes>
           <Route path="/cms" element={<CmsPage />} />

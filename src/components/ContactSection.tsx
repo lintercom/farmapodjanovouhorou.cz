@@ -39,9 +39,9 @@ export function ContactSection({ contact }: ContactSectionProps) {
 
   return (
     <section id="contact" className="section container">
-      <div className="split contact-split cards-bg-title" data-bg-title="Kontakt">
+      <div className={`split contact-split cards-bg-title ${uiPatterns.FloatingPanel}`} data-bg-title="Kontakt">
         <div className="contact-left-stack">
-          <address className="text-card contact-info-card">
+          <address className={`text-card contact-info-card hs-card ${uiPatterns.MinimalContentCard}`}>
               <p>
                 <strong>Adresa:</strong> {contact.address}
               </p>
@@ -55,7 +55,7 @@ export function ContactSection({ contact }: ContactSectionProps) {
               </p>
             </address>
             <a
-              className="contact-map-card"
+              className={`contact-map-card hs-card ${uiPatterns.MinimalContentCard}`}
               href={CONTACT_MAP_URL}
               target="_blank"
               rel="noreferrer"
@@ -74,7 +74,7 @@ export function ContactSection({ contact }: ContactSectionProps) {
           </div>
           <form
             id="contact-form"
-            className={`contact-form vstack gap-2 ${uiPatterns.MinimalContentCard}`}
+            className={`contact-form vstack gap-2 hs-form ${uiPatterns.MinimalContentCard}`}
             noValidate
             aria-describedby="contact-success"
             onSubmit={handleSubmit}
@@ -115,6 +115,36 @@ export function ContactSection({ contact }: ContactSectionProps) {
               {successMsg}
             </p>
           </form>
+      </div>
+      <div className={`action-faq ${uiPatterns.FloatingPanel}`}>
+        <div className="hs-accordion-group" data-hs-accordion-always-open>
+          <div className="hs-accordion active" id="faq-item-1">
+            <button className="hs-accordion-toggle action-faq-toggle" aria-expanded="true" aria-controls="faq-collapse-1">
+              Jak probíhá první návštěva farmy?
+            </button>
+            <div
+              id="faq-collapse-1"
+              className="hs-accordion-content action-faq-content w-full overflow-hidden transition-[height] duration-300"
+              role="region"
+              aria-labelledby="faq-item-1"
+            >
+              <p>Po domluvě termínu tě provedeme areálem, vysvětlíme bezpečnost a doporučíme vhodnou aktivitu podle zkušeností.</p>
+            </div>
+          </div>
+          <div className="hs-accordion" id="faq-item-2">
+            <button className="hs-accordion-toggle action-faq-toggle collapsed" aria-expanded="false" aria-controls="faq-collapse-2">
+              Co si mám vzít s sebou na jízdu?
+            </button>
+            <div
+              id="faq-collapse-2"
+              className="hs-accordion-content action-faq-content hidden w-full overflow-hidden transition-[height] duration-300"
+              role="region"
+              aria-labelledby="faq-item-2"
+            >
+              <p>Doporučujeme pevnou obuv, dlouhé kalhoty a pohodlné vrstvy. Přilbu případně zapůjčíme na místě.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -68,14 +68,14 @@ export function ServicesSection({ services, page }: ServicesSectionProps) {
 
     return (
       <section id="services" className="section container">
-        <div className="service-page-stack cards-bg-title" data-bg-title="Služby">
+        <div className={`service-page-stack cards-bg-title ${uiPatterns.FloatingPanel}`} data-bg-title="Služby">
           {groups.map((group, index) => {
             const groupItems = group.items.length > 0 ? group.items : services.items;
 
             return (
               <article
                 key={group.id}
-                className={`service-feature ${index % 2 === 1 ? "service-feature-reverse" : ""} ${uiPatterns.FloatingServiceCard}`}
+                className={`service-feature hs-card ${index % 2 === 1 ? "service-feature-reverse" : ""} ${uiPatterns.FloatingServiceCard}`}
               >
                 <div className="service-feature-body">
                   <div className="service-feature-head">
@@ -119,7 +119,7 @@ export function ServicesSection({ services, page }: ServicesSectionProps) {
             {groups.map((group, index) => (
               <article
                 key={group.id}
-                className={`service-feature ${index % 2 === 1 ? "service-feature-reverse" : ""} ${uiPatterns.FloatingServiceCard}`}
+                className={`service-feature hs-card ${index % 2 === 1 ? "service-feature-reverse" : ""} ${uiPatterns.FloatingServiceCard}`}
               >
                 <div className="service-feature-body">
                   <h3>{group.title}</h3>
@@ -138,9 +138,9 @@ export function ServicesSection({ services, page }: ServicesSectionProps) {
 
   return (
     <section id="services" className="section container">
-      <div className="card-grid cards-bg-title" data-bg-title="Služby">
+      <div className={`card-grid cards-bg-title ${uiPatterns.FloatingPanel}`} data-bg-title="Služby">
         {services.items.map((item) => (
-          <article key={item.title} className={`card ${uiPatterns.FloatingServiceCard}`}>
+          <article key={item.title} className={`card hs-card ${uiPatterns.FloatingServiceCard}`}>
             <div className="card-body">
               <h3>{item.title}</h3>
               <p>{item.description}</p>

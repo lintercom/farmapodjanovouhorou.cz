@@ -41,13 +41,13 @@ export function HorsesSection({ horses, page }: HorsesSectionProps) {
     return (
       <>
         <section id="horses" className="section container">
-          <div className="card-grid cards-bg-title" data-bg-title="Koně">
+          <div className={`card-grid cards-bg-title ${uiPatterns.FloatingPanel}`} data-bg-title="Koně">
             {horses.items.map((horse, index) => {
               const imageSrc = getHorseImageSource(horse);
               return (
                 <article
                   key={horse.name}
-                  className={`card horse-card ${uiPatterns.FloatingServiceCard} horse-card-clickable`}
+                  className={`card horse-card hs-card ${uiPatterns.FloatingServiceCard} horse-card-clickable`}
                   onClick={() => {
                     setModalIndex(index);
                     setPhotoIndex(0);
